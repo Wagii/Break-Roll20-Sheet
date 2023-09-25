@@ -1,15 +1,21 @@
 /**** General stuff ***/
-
-/**** tabs handler ***/
-/*Configure the tab buttons*/
-
 h1 {
-	width: 100%;
+	flex-grow: 1;
 	background-color: lightgray;
+	margin-top: 6px;
+	margin-bottom: 6px;
+	padding: 4px;
+	border-radius: 4px;
 	text-transform: uppercase;
 	color: black;
 	font-weight: bold;
+	font-size: large;
 }
+
+/**** tabs handler ***/
+/*Configure the tab buttons*/
+/* show the selected tab */
+
 
 .sheet-oneLineInfo {
 	border-top: 2px solid black;
@@ -22,6 +28,7 @@ h1 {
 .sheet-oneLineInfo>span {
 	margin-right: 5px;
 	flex-shrink: 0;
+	width: 75px;
 	font-weight: bold;
 }
 
@@ -31,7 +38,24 @@ h1 {
 	background-color: none;
 }
 
-/* show the selected tab */
+.sheet-multiLineInfo {
+	border-top: 2px solid black;
+	margin-top: 10px;
+	margin-bottom: 6px;
+	padding: 2px;
+}
+
+.sheet-multiLineInfo>span {
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+.sheet-multiLineInfo>textarea {
+	width: 100%;
+	border: none;
+	background-color: none;
+}
+
 input.health-heart[value="off"] {
 	display: none;
 }
