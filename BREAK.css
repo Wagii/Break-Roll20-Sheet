@@ -1,6 +1,6 @@
 /**** General stuff ***/
 h1 {
-	flex-grow: 1;
+	flex-grow: 0;
 	background-color: lightgray;
 	margin-top: 6px;
 	margin-bottom: 6px;
@@ -16,6 +16,30 @@ h1 {
 /*Configure the tab buttons*/
 /* show the selected tab */
 
+/**** sheet ***/
+/*Sheet layout*/
+.sheet-mainPageUpperSide {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.sheet-mainPageLeftSide {
+	flex-shrink: 1;
+	flex-grow: 1;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.sheet-mainPageRightSide {
+	flex-shrink: 1;
+	flex-grow: 1;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+/*Content*/
 
 .sheet-oneLineInfo {
 	border-top: 2px solid black;
