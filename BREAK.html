@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+<script type="text/worker">
+	// Worker
+	//tabs handler
+	const buttonlist = ["stats","notes"];
+	buttonlist.forEach(button => {
+		on(`clicked:${button}`, function() {
+			setAttrs({
+				sheetTab: button
+			});
+		});
+	});
+
+	on("change:might_base change:might_trait change:might_modifier sheet:opened", function() {
+		getAttrs(["might_base", "might_trait", "might_modifier"], function(values) {
+			var base = parseInt(values["might_base"])||6;
+			var trait = parseInt(values["might_trait"])||0;
+			var modifier = parseInt(values["might_modifier"])||0;
+			var total = base + trait + modifier;
+
+			var squares = "";
+			for (var i = 0; i < 20; i++) {
+				squares += (i < total) ? "⬛" : "⬜";
+			}
+
+			setAttrs({
+				"might_total": total,
+				"might_squares": squares
+			});
+		});
+	});
+
+	on("change:deftness_base change:deftness_trait change:deftness_modifier sheet:opened", function() {
+		getAttrs(["deftness_base", "deftness_trait", "deftness_modifier"], function(values) {
+			var base = parseInt(values["deftness_base"])||6;
+			var trait = parseInt(values["deftness_trait"])||0;
+			var modifier = parseInt(values["deftness_modifier"])||0;
+			var total = base + trait + modifier;
+
+			var squares = "";
+			for (var i = 0; i < 20; i++) {
+				squares += (i < total) ? "⬛" : "⬜";
+			}
+
+			setAttrs({
+				"deftness_total": total,
+				"deftness_squares": squares
+			});
+		});
+	});
+
+	on("change:grit_base change:grit_trait change:grit_modifier sheet:opened", function() {
+		getAttrs(["grit_base", "grit_trait", "grit_modifier"], function(values) {
+			var base = parseInt(values["grit_base"])||6;
+			var trait = parseInt(values["grit_trait"])||0;
+			var modifier = parseInt(values["grit_modifier"])||0;
+			var total = base + trait + modifier;
+
+			var squares = "";
+			for (var i = 0; i < 20; i++) {
+				squares += (i < total) ? "⬛" : "⬜";
+			}
+
+			setAttrs({
+				"grit_total": total,
+				"grit_squares": squares
+			});
+		});
+	});
+
+	on("change:insight_base change:insight_trait change:insight_modifier sheet:opened", function() {
+		getAttrs(["insight_base", "insight_trait", "insight_modifier"], function(values) {
+			var base = parseInt(values["insight_base"])||6;
+			var trait = parseInt(values["insight_trait"])||0;
+			var modifier = parseInt(values["insight_modifier"])||0;
+			var total = base + trait + modifier;
+
+			var squares = "";
+			for (var i = 0; i < 20; i++) {
+				squares += (i < total) ? "⬛" : "⬜";
+			}
+
+			setAttrs({
+				"insight_total": total,
+				"insight_squares": squares
+			});
+		});
+	});
+
+	on("change:aura_base change:aura_trait change:aura_modifier sheet:opened", function() {
+		getAttrs(["aura_base", "aura_trait", "aura_modifier"], function(values) {
+			var base = parseInt(values["aura_base"])||6;
+			var trait = parseInt(values["aura_trait"])||0;
+			var modifier = parseInt(values["aura_modifier"])||0;
+			var total = base + trait + modifier;
+
+			var squares = "";
+			for (var i = 0; i < 20; i++) {
+				squares += (i < total) ? "⬛" : "⬜";
+			}
+
+			setAttrs({
+				"aura_total": total,
+				"aura_squares": squares
+			});
+		});
+	});
+
+	on("change:attack_bonus change:attack_bonus_modifier sheet:opened", function() {
+		getAttrs(["attack_bonus", "attack_bonus_modifier"], function(values) {
+			var base = parseInt(values["attack_bonus"])||0;
+			var modifier = parseInt(values["attack_bonus_modifier"])||0;
+			var total = base + modifier;
+			setAttrs({
+				"attack_bonus_total": total,
+				"attack_bonus_withPlus": "+" + total
+			});
+		});
+	});
+
+
+	function Max(values) {
+		if (values.length == 0)
+		return 0;
+		var max = values[0];
+		for (var i = 1; i < values.length; i++) {
+			if (values[i] > max)
+				max = values[i];
+			}
+		return max;
+	}
+
+	function GetClosest(values, attribute, modifier) {
+		// Generate the dice array
+		var dice = [];
+		attribute = parseInt(attribute)||0;
+		modifier = parseInt(modifier)||0;
+
+		for (var i = 0; i < values.length; i++) {
+			values[i] = parseInt(values[i])||20;
+			// Compute the final modifier to apply to each roll
+			var finalModifier = 0;
+			if (modifier < 0) {
+				finalModifier = (values[i] - modifier > attribute) ? -modifier : modifier;
+			} else {
+				if (values[i] > attribute) {
+					finalModifier = Max([-modifier, attribute - values[i]]);
+				} else if (values[i] <= attribute) {
+					finalModifier = Max([modifier, values[i] - attribute]);
+				}
+			}
+
+			//console.log("Value: " + values[i] + "  Modifier: " + modifier + "  Final modifier: " + finalModifier);
+
+			// Add the dice to the array
+			dice.push({
+				original: values[i],
+				result: values[i] + finalModifier,
+				index: i,
+				diff: attribute - (values[i] + finalModifier),
+				success: (values[i] + finalModifier) <= attribute
+			});
+		}
+
+		// If there is a critical, select it
+		var anyCrit = dice.some((die) => die.original == attribute);
+		var succi = dice.filter((die) => die.success);
+		var fails = dice.filter((die) => !die.success);
+		if (anyCrit)
+			return {
+				selected: dice.find((die) => die.original == attribute),
+				dice: dice,
+				succi: succi,
+				fails: fails
+			};
+
+		// Select dice with success and the closest result
+		if (succi.length > 0) {
+			succi.sort((a, b) => a.diff - b.diff);
+			return {selected: succi[0], dice: dice, succi: succi, fails: fails};
+		} else {
+			dice.sort((a, b) => b.diff - a.diff);
+			return {selected: dice[0], dice: dice, succi: succi, fails: fails};
+		}
+	}
+
+
+	function GetFarthest(values, attribute, modifier) {
+		// Generate the dice array
+		var dice = [];
+		attribute = parseInt(attribute)||0;
+		modifier = parseInt(modifier)||0;
+
+		for (var i = 0; i < values.length; i++) {
+			values[i] = parseInt(values[i])||20;
+			// Compute the final modifier to apply to each roll
+			var finalModifier = 0;
+			if (modifier < 0) {
+				finalModifier = (values[i] - modifier > attribute) ? -modifier : modifier;
+			} else {
+				if (values[i] > attribute && values[i] - modifier <= attribute) {
+					finalModifier = attribute - values[i];
+				} else if (values[i] > attribute && values[i] - modifier > attribute) {
+					finalModifier = -modifier;
+				} else if (values[i] <= attribute) {
+					finalModifier = Max([modifier, values[i] - attribute]);
+				}
+			}
+
+			//console.log("Value: " + values[i] + "  Modifier: " + modifier + "  Final modifier: " + finalModifier);
+
+			// Add the dice to the array
+			dice.push({
+				original: values[i],
+				result: values[i] + finalModifier,
+				index: i,
+				diff: attribute - (values[i] + finalModifier),
+				success: values[i] + finalModifier <= attribute
+			});
+		}
+
+		// If there is a fumble, select it
+		var anyFumble = dice.some((die) => die.original == 20);
+		var succi = dice.filter((die) => die.success);
+		var fails = dice.filter((die) => !die.success);
+		if (anyFumble)
+			return {
+				selected: dice.find((die) => die.original == 20),
+				dice: dice,
+				succi: succi,
+				fails: fails
+			};
+
+		// Select dice with success and the closest result
+		if (fails.length > 0) {
+			fails.sort((a, b) => b.result - a.result);
+			/*
+			console.log("Failure");
+			for (var i = 0; i < fails.length; i++) {
+				console.log(fails[i].result);
+			}
+			*/
+			return {selected: fails[0], dice: dice};
+		} else {
+			dice.sort((a, b) => a.result - b.result);
+			/*
+			console.log("Success");
+			for (var i = 0; i < dice.length; i++) {
+				console.log(dice[i].result);
+			}
+			*/
+			if (dice.filter((die) => die.diff == 0).some((die) => die.original == attribute))
+				return {selected: dice.find((die) => die.diff == 0 && die.original == attribute), dice: dice};
+			else
+				return {selected: dice[0], dice: dice};
+			}
+	}
+
+	function ComputeOneDieResult(value, attribute, modifier) {
+		// In case of a critical or a fumble, we don't care about the modifier
+
+		// Critical
+		if (value == attribute) {
+			return {total: value, result: "critical"};
+		}
+		// Fumble
+		else if (value == 20) {
+			return {total: value, result: "fumble"};
+		}
+		// Failure before modifier
+		else if (value > attribute) {
+			// Negative modifier result in a harsher failure
+			if (modifier < 0) {
+				return {total: value - modifier, result: "failure"};
+			}
+			// Positive modifier may result in a success
+			else {
+				// Success if the modifier is enough to reach the attribute
+				if (value - modifier <= attribute) {
+					return {total: attribute, result: "success"};
+				}
+				// Failure if the modifier is not enough to reach the attribute
+				else {
+					return {total: value - modifier, result: "failure"};
+				}
+			}
+		}
+		// Success before modifier
+		else {
+			// Negative modifier may result in a failure
+			if (modifier < 0) {
+				// Failure if the modifier is enough to overshoot the attribute
+				if (value - modifier > attribute) {
+					return {total: value - modifier, result: "failure"};
+				}
+				// If it's still a success, reduce the roll to make it less good
+				else {
+					return {total: value + modifier, result: "success"};
+				}
+			}
+			else {
+				// Positive modifier result in a better success
+				if (value + modifier >= attribute) {
+					return {total: attribute, result: "success"};
+				}
+				// In any case, increase the roll to make it better
+				else {
+					return {total: value + modifier, result: "success"};
+				}
+			}
+		}
+	}
+
+	function ComputeWithEdge(values, attribute, modifier) {
+		var result = GetClosest(values, attribute, modifier);
+
+		if (result.selected.original == attribute) {
+			return {total: result.selected.original, result: "critical"};
+		} else if (result.selected.original == 20) {
+			return {total: result.selected.original, result: "fumble"};
+		} else if (result.selected.success) {
+			return {total: result.selected.result, result: "success"};
+		} else {
+			return {total: result.selected.result, result: "failure"};
+		}
+	}
+
+	function ComputeWithSnag(values, attribute, modifier) {
+		var result = GetFarthest(values, attribute, modifier);
+
+		if (result.selected.original == attribute) {
+			return {total: result.selected.original, result: "critical"};
+		} else if (result.selected.original == 20) {
+			return {total: result.selected.original, result: "fumble"};
+		} else if (result.selected.success) {
+			return {total: result.selected.result, result: "success"};
+		} else {
+			return {total: result.selected.result, result: "failure"};
+		}
+	}
+
+	on("clicked:might", function() {
+		getAttrs(["might_total"], function(values) {
+			var attribute = parseInt(values["might_total"])||0;
+			const rollString = "&{template:carac} {{name=Might Roll}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=success}}";
+
+			startRoll(rollString, function(results) {
+				const l_roll1 = results.results.roll1;
+				const modifier = parseInt(results.results.modifier.result)||0;
+				const rollType = parseInt(results.results.rollType.result)||0;
+
+				console.log("Dice: " + l_roll1.dice);
+				console.log("Modifier: " + modifier);
+				console.log("Roll Type: " + rollType);
+
+				var l_selectedDie = 0;
+				if (rollType == 0) {
+					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
+				} else if (rollType == 1) {
+					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
+				} else {
+					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
+				}
+
+				var l_rollType = "";
+				if (rollType == 0) {
+					l_rollType = "Basic";
+				} else if (rollType == 1) {
+					l_rollType = "Edge";
+				} else {
+					l_rollType = "Snag";
+				}
+
+				console.log("Total: " + l_selectedDie.total + " (" + l_selectedDie.result + ")");
+
+				console.log("Rolls: " + l_roll1.dice);
+
+				const computed = {
+					total: l_selectedDie.total,
+					result: l_selectedDie.result,
+					modifier: modifier,
+					rollType: l_rollType
+				};
+
+				finishRoll(results.rollId, computed);
+			});
+		});
+	});
+
+	on("clicked:deftness", function() {
+		getAttrs(["deftness_total"], function(values) {
+			var attribute = parseInt(values["deftness_total"])||0;
+			const rollString = "&{template:carac} {{name=Deftness Roll}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=success}}";
+
+			startRoll(rollString, function(results) {
+				const l_roll1 = results.results.roll1;
+				const modifier = parseInt(results.results.modifier.result)||0;
+				const rollType = parseInt(results.results.rollType.result)||0;
+
+				console.log("Dice: " + l_roll1.dice);
+				console.log("Modifier: " + modifier);
+				console.log("Roll Type: " + rollType);
+
+				var l_selectedDie = 0;
+				if (rollType == 0) {
+					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
+				} else if (rollType == 1) {
+					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
+				} else {
+					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
+				}
+
+				var l_rollType = "";
+				if (rollType == 0) {
+					l_rollType = "Basic";
+				} else if (rollType == 1) {
+					l_rollType = "Edge";
+				} else {
+					l_rollType = "Snag";
+				}
+
+				console.log("Total: " + l_selectedDie.total + " (" + l_selectedDie.result + ")");
+
+				console.log("Rolls: " + l_roll1.dice);
+
+				const computed = {
+					total: l_selectedDie.total,
+					result: l_selectedDie.result,
+					modifier: modifier,
+					rollType: l_rollType
+				};
+
+				finishRoll(results.rollId, computed);
+			});
+		});
+	});
+
+	on("clicked:grit", function() {
+		getAttrs(["grit_total"], function(values) {
+			var attribute = parseInt(values["grit_total"])||0;
+			const rollString = "&{template:carac} {{name=Grit Roll}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=success}}";
+
+			startRoll(rollString, function(results) {
+				const l_roll1 = results.results.roll1;
+				const modifier = parseInt(results.results.modifier.result)||0;
+				const rollType = parseInt(results.results.rollType.result)||0;
+
+				console.log("Dice: " + l_roll1.dice);
+				console.log("Modifier: " + modifier);
+				console.log("Roll Type: " + rollType);
+
+				var l_selectedDie = 0;
+				if (rollType == 0) {
+					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
+				} else if (rollType == 1) {
+					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
+				} else {
+					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
+				}
+
+				var l_rollType = "";
+				if (rollType == 0) {
+					l_rollType = "Basic";
+				} else if (rollType == 1) {
+					l_rollType = "Edge";
+				} else {
+					l_rollType = "Snag";
+				}
+
+				console.log("Total: " + l_selectedDie.total + " (" + l_selectedDie.result + ")");
+
+				console.log("Rolls: " + l_roll1.dice);
+
+				const computed = {
+					total: l_selectedDie.total,
+					result: l_selectedDie.result,
+					modifier: modifier,
+					rollType: l_rollType
+				};
+
+				finishRoll(results.rollId, computed);
+			});
+		});
+	});
+
+	on("clicked:insight", function() {
+		getAttrs(["insight_total"], function(values) {
+			var attribute = parseInt(values["insight_total"])||0;
+			const rollString = "&{template:carac} {{name=Insight Roll}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=success}}";
+
+			startRoll(rollString, function(results) {
+				const l_roll1 = results.results.roll1;
+				const modifier = parseInt(results.results.modifier.result)||0;
+				const rollType = parseInt(results.results.rollType.result)||0;
+
+				console.log("Dice: " + l_roll1.dice);
+				console.log("Modifier: " + modifier);
+				console.log("Roll Type: " + rollType);
+
+				var l_selectedDie = 0;
+				if (rollType == 0) {
+					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
+				} else if (rollType == 1) {
+					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
+				} else {
+					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
+				}
+
+				var l_rollType = "";
+				if (rollType == 0) {
+					l_rollType = "Basic";
+				} else if (rollType == 1) {
+					l_rollType = "Edge";
+				} else {
+					l_rollType = "Snag";
+				}
+
+				console.log("Total: " + l_selectedDie.total + " (" + l_selectedDie.result + ")");
+
+				console.log("Rolls: " + l_roll1.dice);
+
+				const computed = {
+					total: l_selectedDie.total,
+					result: l_selectedDie.result,
+					modifier: modifier,
+					rollType: l_rollType
+				};
+
+					finishRoll(results.rollId, computed);
+			});
+		});
+	});
+
+	on("clicked:aura", function() {
+		getAttrs(["aura_total"], function(values) {
+			var attribute = parseInt(values["aura_total"])||0;
+			const rollString = "&{template:carac} {{name=Aura Roll}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=success}}";
+
+			startRoll(rollString, function(results) {
+				const l_roll1 = results.results.roll1;
+				const modifier = parseInt(results.results.modifier.result)||0;
+				const rollType = parseInt(results.results.rollType.result)||0;
+
+				console.log("Dice: " + l_roll1.dice);
+				console.log("Modifier: " + modifier);
+				console.log("Roll Type: " + rollType);
+
+				var l_selectedDie = 0;
+				if (rollType == 0) {
+					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
+				} else if (rollType == 1) {
+					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
+				} else {
+					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
+				}
+
+				var l_rollType = "";
+				if (rollType == 0) {
+					l_rollType = "Basic";
+				} else if (rollType == 1) {
+					l_rollType = "Edge";
+				} else {
+					l_rollType = "Snag";
+				}
+
+				console.log("Total: " + l_selectedDie.total + " (" + l_selectedDie.result + ")");
+
+					console.log("Rolls: " + l_roll1.dice);
+
+				const computed = {
+					total: l_selectedDie.total,
+					result: l_selectedDie.result,
+					modifier: modifier,
+					rollType: l_rollType
+				};
+
+				finishRoll(results.rollId, computed);
+			});
+		});
+	});
+
+	const damageButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `change:health_heart_${i}`).join(' ');
+	const hiddenHearts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `health_heart_${i}_hidden`).join(' ');
+	on("change:health_base change:health_modifier sheet:opened", function() {
+		getAttrs(["health_base", "health_modifier", "health_hearts"], function(values) {
+			const output = {};
+
+			var base = parseInt(values["health_base"])||0;
+			var modifier = parseInt(values["health_modifier"])||0;
+			var hearts = parseInt(values["health_hearts"])||0;
+			var total = base + modifier;
+			output["health_total"] = total;
+
+			for (let i = 1; i <= total; i++) {
+				output[`health_heart_${i}`] = (i <= hearts) ? "on" : 0;
+			}
+
+			for (let i = total + 1; i <= 10; i++) {
+				output[`health_heart_${i}`] = "off";
+			}
+
+			if (hearts > total) {
+				output["health_hearts"] = total;
+			}
+
+			console.log(output);
+			setAttrs(output, {silent: true});
+		});
+	});
+
+	on(`${damageButtons}`, function(eventInfo) {
+		const clicked = parseInt(eventInfo.sourceAttribute.replace("health_heart_", "")) || 3;
+		const output = {};
+
+		for (let i = 1; i <= 10; i++) {
+			if (i == clicked) continue;
+			output[`health_heart_${i}`] = (i < clicked) ? "on" : 0;
+		}
+
+		output["health_hearts"] = clicked - (eventInfo.newValue == "on" ? 0 : 1);
+
+		setAttrs(output, {silent: true});
+	});
+
+	on("change:health_hearts", function() {
+		getAttrs(["health_hearts", "health_total"], function(values) {
+			const hearts = parseInt(values["health_hearts"])||0;
+			const total = parseInt(values["health_total"])||0;
+			const output = {};
+
+			for (let i = 1; i <= total; i++) {
+				output[`health_heart_${i}`] = (i <= hearts) ? "on" : 0;
+			}
+
+			if (hearts > total) {
+				output["health_hearts"] = total;
+			}
+
+			setAttrs(output, {silent: true});
+		});
+	});
+
+	on("change:defense_rating change:defense_rating_modifier change:speed_rating sheet:opened", function() {
+		getAttrs(["defense_rating", "defense_rating_modifier", "speed_rating"], function(values) {
+			var base = parseInt(values["defense_rating"])||0;
+			var modifier = parseInt(values["defense_rating_modifier"])||0;
+			var speed = parseInt(values["speed_rating"])||0;
+			var speed_defense_modifier = 0;
+			if (speed == 0) {
+				speed_defense_modifier = 0;
+			} else if (speed == 1) {
+				speed_defense_modifier = 0;
+			} else if (speed == 2) {
+				speed_defense_modifier = 2;
+			} else if (speed == 3) {
+				speed_defense_modifier = 4;
+			}
+			var total = base + modifier + speed_defense_modifier;
+			setAttrs({
+				"defense_rating_total": total
+			});
+		});
+	});
+
+	on("change:speed_rating_name change:speed_rating_modifier sheet:opened", function() {
+		getAttrs(["speed_rating_name", "speed_rating_modifier"], function(values) {
+			var speed_name = values["speed_rating_name"];
+			var speed_modifier = parseInt(values["speed_rating_modifier"])||0;
+			var speed = 0;
+			if (speed_name === "Slow") {
+				speed = 0;
+			} else if (speed_name === "Average") {
+				speed = 1;
+			} else if (speed_name === "Fast") {
+				speed = 2;
+			} else if (speed_name === "Very Fast") {
+				speed = 3;
+			}
+
+			speed += speed_modifier;
+			if (speed < 0) {
+				speed = 0;
+			} else if (speed > 3) {
+				speed = 3;
+			}
+
+			setAttrs({
+				"speed_rating": speed
+			});
+		});
+	});
+</script>
+
+<html>
+<div>
+	<input type="hidden" class="sheet-tabstoggle" name="attr_sheetTab" value="stats" />
+	<div>
+		<button type="action" class="toggle-button" name="act_stats">Stats</button>
+		<button type="action" class="toggle-button" name="act_notes">Notes</button>
+	</div>
+	<div class="sheet-stats">
+		<div>
+			<!-- Upper -->
+			<div>
+				<!-- Identity -->
+				<h1>Identity</h1>
+				<div class="sheet-oneLineInfo"><span>Name</span><input type="text" name="attr_character_name" /></div>
+				<div class="sheet-oneLineInfo"><span>Calling</span><input type="text" name="attr_calling" /></div>
+				<div class="sheet-oneLineInfo"><span>Specie</span><input type="text" name="attr_specie" /></div>
+				<div class="sheet-oneLineInfo"><span>Homeland</span><input type="text" name="attr_homeland" /></div>
+				<div class="sheet-oneLineInfo"><span>Languages</span><textarea name="attr_languages" value="Low speech"></textarea></div>
+				<div class="sheet-multiLineInfo"><span>History</span><input type="text" name="attr_history" /></div>
+				<div class="sheet-multiLineInfo"><span>Purviews</span><textarea name="attr_purviews">My background grants me an Edge on...</textarea></div>
+				<div class="sheet-multiLineInfo"><span>Description</span><textarea name="attr_description"></textarea></div>
+			</div>
+			<div>
+				<!-- Aptitudes -->
+				<h1>Aptitudes</h1>
+				<h2 class="sheet-attribute">Might</h2>
+				Smash, crush, lift
+				<span>BASE</span><input type="number" name="attr_might_base" value="6" />
+				<span>TRAITS</span>
+				<div>
+					<span> -2</span><input type="radio" name="attr_might_trait" value="-2" />
+					<span> -1</span><input type="radio" name="attr_might_trait" value="-1" />
+					<span> 0</span><input type="radio" name="attr_might_trait" value="0" checked />
+					<span> 1</span><input type="radio" name="attr_might_trait" value="1" />
+					<span> 2</span><input type="radio" name="attr_might_trait" value="2" />
+				</div>
+				<!-- value="/roll 1d20<@{might_total}" -->
+				<button type="action" name="act_might"><span name="attr_might_total"></span></button>
+				<input type="hidden" name="attr_might_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
+				<span name="attr_might_squares"></span>
+				Bonuses/Penalties <input type="number" name="attr_might_modifier" value="0" />
+				<input type="hidden" name="attr_might_total" />
+
+				<h2 class="sheet-attribute">Deftness</h2>
+				Dodge, sneak, leap
+				<span>BASE</span><input type="number" name="attr_deftness_base" value="6" />
+				<span>TRAITS</span>
+				<div>
+					<span> -2</span><input type="radio" name="attr_deftness_trait" value="-2" />
+					<span> -1</span><input type="radio" name="attr_deftness_trait" value="-1" />
+					<span> 0</span><input type="radio" name="attr_deftness_trait" value="0" checked />
+					<span> 1</span><input type="radio" name="attr_deftness_trait" value="1" />
+					<span> 2</span><input type="radio" name="attr_deftness_trait" value="2" />
+				</div>
+				<!-- value="/roll d20<@{deftness_total}" -->
+				<button type="action" name="act_deftness"><span name="attr_deftness_total"></span></button>
+				<input type="hidden" name="attr_deftness_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
+				<span name="attr_deftness_squares"></span>
+				Bonuses/Penalties <input type="number" name="attr_deftness_modifier" value="0" />
+				<input type="hidden" name="attr_deftness_total" />
+
+				<h2 class="sheet-attribute">Grit</h2>
+				Cling, persist, press on
+				<span>BASE</span><input type="number" name="attr_grit_base" value="6" />
+				<span>TRAITS</span>
+				<div>
+					<span> -2</span><input type="radio" name="attr_grit_trait" value="-2" />
+					<span> -1</span><input type="radio" name="attr_grit_trait" value="-1" />
+					<span> 0</span><input type="radio" name="attr_grit_trait" value="0" checked />
+					<span> 1</span><input type="radio" name="attr_grit_trait" value="1" />
+					<span> 2</span><input type="radio" name="attr_grit_trait" value="2" />
+				</div>
+				<!-- value="/roll d20<@{grit_total}" -->
+				<button type="action" name="act_grit"><span name="attr_grit_total"></span></button>
+				<input type="hidden" name="attr_grit_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
+				<span name="attr_grit_squares"></span>
+				Bonuses/Penalties <input type="number" name="attr_grit_modifier" value="0" />
+				<input type="hidden" name="attr_grit_total" />
+
+				<h2 class="sheet-attribute">Insigth</h2>
+				Notice, know, remember
+				<span>BASE</span><input type="number" name="attr_insight_base" value="6" />
+				<span>TRAITS</span>
+				<div>
+					<span> -2</span><input type="radio" name="attr_insight_trait" value="-2" />
+					<span> -1</span><input type="radio" name="attr_insight_trait" value="-1" />
+					<span> 0</span><input type="radio" name="attr_insight_trait" value="0" checked />
+					<span> 1</span><input type="radio" name="attr_insight_trait" value="1" />
+					<span> 2</span><input type="radio" name="attr_insight_trait" value="2" />
+				</div>
+				<!-- value="/roll d20<@{insight_total}" -->
+				<button type="action" name="atc_insight"><span name="attr_insight_total"></span></button>
+				<input type="hidden" name="attr_insight_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
+				<span name="attr_insight_squares"></span>
+				Bonuses/Penalties <input type="number" name="attr_insight_modifier" value="0" />
+				<input type="hidden" name="attr_insight_total" />
+
+				<h2 class="sheet-attribute">Aura</h2>
+				Persuade, inspire, terrify
+				<span>BASE</span><input type="number" name="attr_aura_base" value="6" />
+				<span>TRAITS</span>
+				<div>
+					<span> -2</span><input type="radio" name="attr_aura_trait" value="-2" />
+					<span> -1</span><input type="radio" name="attr_aura_trait" value="-1" />
+					<span> 0</span><input type="radio" name="attr_aura_trait" value="0" checked />
+					<span> 1</span><input type="radio" name="attr_aura_trait" value="1" />
+					<span> 2</span><input type="radio" name="attr_aura_trait" value="2" />
+				</div>
+				<!-- value="/roll d20<@{aura_total}" -->
+				<button type="action" name="act_aura"><span name="attr_aura_total"></span></button>
+				<input type="hidden" name="attr_aura_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
+				<span name="attr_aura_squares"></span>
+				Bonuses/Penalties <input type="number" name="attr_aura_modifier" value="0" />
+				<input type="hidden" name="attr_aura_total" />
+			</div>
+		</div>
+		<div>
+			<!-- Lower -->
+			<div>
+				<!-- Combat values -->
+				<h1>Combat Values</h1>
+				<div>
+					Attack bonus
+					Add to my attack rolls
+					Base <input type="number" name="attr_attack_bonus" value="0" />
+					Bonuses/Penalties <input type="number" name="attr_attack_bonus_modifier" />
+					<input type="hidden" name="attr_attack_bonus_total" value="0" />
+					<input type="hidden" name="attr_attack_bonus_withPlus" />
+					<button type="roll" name="roll_attack_bonus" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
+				</div>
+				<div>
+					Health total
+					Protecting me from injuriy
+					Base <input type="number" name="attr_health_base" value="2" />
+					<!-- Mettre ici les coeurs, en attendant, go juste le actual/total -->
+					Hearts <input type="number" name="attr_health_hearts" value="2" />/<span name="attr_health_total"></span>
+					<input type="checkbox" class="health-heart" name="attr_health_heart_1" value="on" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_2" value="on" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_3" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_4" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_5" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_6" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_7" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_8" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_9" value="off" />
+					<input type="checkbox" class="health-heart" name="attr_health_heart_10" value="off" />
+					Bonuses/Penalties <input type="number" name="attr_health_modifier" value="0" />
+					<input type="hidden" name="attr_health_total" value="2" />
+					<input type="text" name="attr_injuries" />
+					<button type="action" name="action_health"><span name="attr_health_total"></span></button>
+				</div>
+				<div>
+					Defense rating
+					Best this to strike me
+					Base <input type="number" name="attr_defense_rating" value="10" />
+					Bonuses/Penalties <input type="number" name="attr_defense_rating_modifier" value="0" />
+					<input type="hidden" name="attr_defense_rating_total" value="10" />
+					<button type="action" name="roll_defense_rating"><span name="attr_defense_rating_total"></span></button>
+				</div>
+				<div>
+					Speed rating
+					Decides how many Areas I can move
+					<input type="radio" name="attr_speed_rating" value="0" />
+					<input type="radio" name="attr_speed_rating" value="1" checked />
+					<input type="radio" name="attr_speed_rating" value="2" />
+					<input type="radio" name="attr_speed_rating" value="3" />
+					Base <input type="text" name="attr_speed_rating_name" value="Average" />
+					Bonuses/Penalties <input type="number" name="attr_speed_rating_modifier" value="0" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="sheet-notes">
+		<div>
+			<!-- Notes -->
+			<h1>Quirk</h1>
+			<input type="text" name="attr_quirk" />
+			<textarea name="attr_quirk_notes"></textarea>
+			<h1>Abilities</h1>
+			<fieldset class="repeating_abilities">
+				<input type="text" name="ability_name" />
+				<textarea name="ability_notes"></textarea>
+			</fieldset>
+			<h1>Rank & XP</h1>
+			Rank <input type="number" name="attr_rank" />
+			Current XP <input type="number" name="attr_xp_current" />
+			XP for next rank <input type="number" name="attr_xp_next" />
+			<h1>Allegiance</h1>
+			Dark <input type="number" name="attr_allegiance_dark" />
+			Bright <input type="number" name="attr_allegiance_bright" />
+			<input type="radio" name="attr_alignment" value="None" />
+			<input type="radio" name="attr_alignment" value="Dark" />
+			<input type="radio" name="attr_alignment" value="Twiligth" />
+			<input type="radio" name="attr_alignment" value="Dark" />
+			Gifts <textarea name="attr_gifts"></textarea>
+			<h1>Inventory</h1>
+			Base <input type="number" name="attr_inventory_base" />
+			Bonuses/Penalties <input type="number" name="attr_inventory_modifier" />
+			<input type="hidden" name="attr_inventory_total" />
+			<button type="roll" name="roll_inventory"><span name="attr_inventory_total"></span></button>
+			<input type="hidden" name="attr_inventory_left" />
+			<button type="roll" name="roll_inventory_left"><span name="attr_inventory_left"></span></button>
+			<fieldset class="repeating_inventory">
+			<input type="text" name="inventory_name" />
+			<input type="number" name="inventory_size" />
+			<textarea name="inventory_notes"></textarea>
+			</fieldset>
+			<h1>Wealth</h1>
+			Stones <input type="number" name="attr_wealth_stones" />
+			Coins <input type="number" name="attr_wealth_coins" />
+			Gems <input type="number" name="attr_wealth_gems" />
+		</div>
+		<div>
+			Notes <textarea name="attr_notes"></textarea>
+		</div>
+	</div>
+</div>
+
+<!-- End Of Characters Sheet -->
+
+<!-- Rolls Templates  -->
+<rolltemplate class="sheet-rolltemplate-carac">
+	<div class="sheet-template-container">
+		<div class="sheet-template-header"><span>{{name}}</span></div>
+		<div class="sheet-results">
+			<div class="sheet-template-row"><span>Total = </span>{{computed::total}}</div>
+			<div class="sheet-template-row"><span>Result = </span>{{computed::result}}</div>
+			<div class="sheet-rolls">
+				<h4>Modifier = {{computed::modifier}}</h4>
+				<h4>Roll Type = {{rollType}}</h4>
+			</div>
+		</div>
+	</div>
+</rolltemplate>
+
+<rolltemplate class="sheet-rolltemplate-carac">
+	<div class="sheet-template-container">
+		<h1>{{name}}</h1>
+		<div class="sheet-results">
+			<h4>Result = {{total}}</h4>
+			<h4>Roll = {{roll}}</h4>
+		</div>
+	</div>
+</rolltemplate>
+
+<!-- Rolls Templates End -->
+
+</html>

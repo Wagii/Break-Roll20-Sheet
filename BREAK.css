@@ -1,0 +1,37 @@
+/**** General stuff ***/
+
+/**** tabs handler ***/
+/*Configure the tab buttons*/
+
+h1 {
+	width: 100%;
+	background-color: lightgray;
+	text-transform: uppercase;
+	color: black;
+	font-weight: bold;
+}
+
+.sheet-oneLineInfo {
+	border-top: 2px solid black;
+	margin-top: 10px;
+	margin-bottom: 6px;
+	padding: 2px;
+	display: flex;
+}
+
+.sheet-oneLineInfo>span {
+	margin-right: 5px;
+	flex-shrink: 0;
+	font-weight: bold;
+}
+
+.sheet-oneLineInfo>input {
+	flex-grow: 1;
+	border: none;
+	background-color: none;
+}
+
+/* show the selected tab */
+input.health-heart[value="off"] {
+	display: none;
+}
