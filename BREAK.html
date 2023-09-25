@@ -14,96 +14,63 @@
 
 	on("change:might_base change:might_trait change:might_modifier sheet:opened", function() {
 		getAttrs(["might_base", "might_trait", "might_modifier"], function(values) {
-			var base = parseInt(values["might_base"])||6;
-			var trait = parseInt(values["might_trait"])||0;
-			var modifier = parseInt(values["might_modifier"])||0;
-			var total = base + trait + modifier;
+			var output = {};
 
-			var squares = "";
-			for (var i = 0; i < 20; i++) {
-				squares += (i < total) ? "⬛" : "⬜";
-			}
+			output["might_total"] = parseInt(values["might_base"])||6
+			+ parseInt(values["might_trait"])||0
+			+ parseInt(values["might_modifier"])||0;
 
-			setAttrs({
-				"might_total": total,
-				"might_squares": squares
-			});
+			setAttrs(output, {silent: true});
 		});
 	});
 
 	on("change:deftness_base change:deftness_trait change:deftness_modifier sheet:opened", function() {
 		getAttrs(["deftness_base", "deftness_trait", "deftness_modifier"], function(values) {
-			var base = parseInt(values["deftness_base"])||6;
-			var trait = parseInt(values["deftness_trait"])||0;
-			var modifier = parseInt(values["deftness_modifier"])||0;
-			var total = base + trait + modifier;
+			var output = {};
 
-			var squares = "";
-			for (var i = 0; i < 20; i++) {
-				squares += (i < total) ? "⬛" : "⬜";
-			}
+			output["deftness_total"] = parseInt(values["deftness_base"])||6
+			+ parseInt(values["deftness_trait"])||0
+			+ parseInt(values["deftness_modifier"])||0;
 
-			setAttrs({
-				"deftness_total": total,
-				"deftness_squares": squares
-			});
+			setAttrs(output, {silent: true});
 		});
 	});
 
 	on("change:grit_base change:grit_trait change:grit_modifier sheet:opened", function() {
 		getAttrs(["grit_base", "grit_trait", "grit_modifier"], function(values) {
-			var base = parseInt(values["grit_base"])||6;
-			var trait = parseInt(values["grit_trait"])||0;
-			var modifier = parseInt(values["grit_modifier"])||0;
-			var total = base + trait + modifier;
+			var output = {};
 
-			var squares = "";
-			for (var i = 0; i < 20; i++) {
-				squares += (i < total) ? "⬛" : "⬜";
-			}
+			output["grit_total"] = parseInt(values["grit_base"])||6
+			+ parseInt(values["grit_trait"])||0
+			+ parseInt(values["grit_modifier"])||0;
 
-			setAttrs({
-				"grit_total": total,
-				"grit_squares": squares
-			});
+			setAttrs(output, {silent: true});
 		});
 	});
 
 	on("change:insight_base change:insight_trait change:insight_modifier sheet:opened", function() {
 		getAttrs(["insight_base", "insight_trait", "insight_modifier"], function(values) {
-			var base = parseInt(values["insight_base"])||6;
-			var trait = parseInt(values["insight_trait"])||0;
-			var modifier = parseInt(values["insight_modifier"])||0;
-			var total = base + trait + modifier;
+			var output = {};
 
-			var squares = "";
-			for (var i = 0; i < 20; i++) {
-				squares += (i < total) ? "⬛" : "⬜";
-			}
+			output["insight_total"] = parseInt(values["insight_base"])||6
+			+ parseInt(values["insight_trait"])||0
+			+ parseInt(values["insight_modifier"])||0;
 
-			setAttrs({
-				"insight_total": total,
-				"insight_squares": squares
-			});
+			setAttrs(output, {silent: true});
 		});
 	});
 
 	on("change:aura_base change:aura_trait change:aura_modifier sheet:opened", function() {
 		getAttrs(["aura_base", "aura_trait", "aura_modifier"], function(values) {
+			var output = {};
+
 			var base = parseInt(values["aura_base"])||6;
 			var trait = parseInt(values["aura_trait"])||0;
 			var modifier = parseInt(values["aura_modifier"])||0;
-			var total = base + trait + modifier;
 
-			var squares = "";
-			for (var i = 0; i < 20; i++) {
-				squares += (i < total) ? "⬛" : "⬜";
-			}
+			output["aura_total"] = base + trait + modifier;
 
-			setAttrs({
-				"aura_total": total,
-				"aura_squares": squares
-			});
+			setAttrs(output, {silent: true});
 		});
 	});
 
@@ -647,9 +614,7 @@
 			var modifier = parseInt(values["defense_rating_modifier"])||0;
 			var speed = parseInt(values["speed_rating"])||0;
 			var speed_defense_modifier = 0;
-			if (speed == 0) {
-				speed_defense_modifier = 0;
-			} else if (speed == 1) {
+			if (speed == 0 || speed == 1) {
 				speed_defense_modifier = 0;
 			} else if (speed == 2) {
 				speed_defense_modifier = 2;
@@ -665,6 +630,7 @@
 
 	on("change:speed_rating_name change:speed_rating_modifier sheet:opened", function() {
 		getAttrs(["speed_rating_name", "speed_rating_modifier"], function(values) {
+			var output = {};
 			var speed_name = values["speed_rating_name"];
 			var speed_modifier = parseInt(values["speed_rating_modifier"])||0;
 			var speed = 0;
@@ -685,9 +651,9 @@
 				speed = 3;
 			}
 
-			setAttrs({
-				"speed_rating": speed
-			});
+			output["speed_rating"] = speed;
+
+			setAttrs(output, {silent: false});
 		});
 	});
 </script>
@@ -730,8 +696,28 @@
 				</div>
 				<!-- value="/roll 1d20<@{might_total}" -->
 				<button type="action" name="act_might"><span name="attr_might_total"></span></button>
-				<input type="hidden" name="attr_might_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
-				<span name="attr_might_squares"></span>
+				<div class="sheet-squares">
+					<button type="action" name="act_might_square_1" value="on"></button>
+					<button type="action" name="act_might_square_2" value="on"></button>
+					<button type="action" name="act_might_square_3" value="on"></button>
+					<button type="action" name="act_might_square_4" value="on"></button>
+					<button type="action" name="act_might_square_5" value="on"></button>
+					<button type="action" name="act_might_square_6" value="on"></button>
+					<button type="action" name="act_might_square_7" value="on"></button>
+					<button type="action" name="act_might_square_8" value="on"></button>
+					<button type="action" name="act_might_square_9" value="on"></button>
+					<button type="action" name="act_might_square_10" value="on"></button>
+					<button type="action" name="act_might_square_11" value="on"></button>
+					<button type="action" name="act_might_square_12" value="on"></button>
+					<button type="action" name="act_might_square_13" value="on"></button>
+					<button type="action" name="act_might_square_14" value="on"></button>
+					<button type="action" name="act_might_square_15" value="on"></button>
+					<button type="action" name="act_might_square_16" value="on"></button>
+					<button type="action" name="act_might_square_17" value="on"></button>
+					<button type="action" name="act_might_square_18" value="on"></button>
+					<button type="action" name="act_might_square_19" value="on"></button>
+					<button type="action" name="act_might_square_20" value="on"></button>
+				</div>
 				Bonuses/Penalties <input type="number" name="attr_might_modifier" value="0" />
 				<input type="hidden" name="attr_might_total" />
 
@@ -748,8 +734,28 @@
 				</div>
 				<!-- value="/roll d20<@{deftness_total}" -->
 				<button type="action" name="act_deftness"><span name="attr_deftness_total"></span></button>
-				<input type="hidden" name="attr_deftness_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
-				<span name="attr_deftness_squares"></span>
+				<div class="sheet-squares">
+					<button type="action" name="act_deftness_square_1" value="on"></button>
+					<button type="action" name="act_deftness_square_2" value="on"></button>
+					<button type="action" name="act_deftness_square_3" value="on"></button>
+					<button type="action" name="act_deftness_square_4" value="on"></button>
+					<button type="action" name="act_deftness_square_5" value="on"></button>
+					<button type="action" name="act_deftness_square_6" value="on"></button>
+					<button type="action" name="act_deftness_square_7" value="on"></button>
+					<button type="action" name="act_deftness_square_8" value="on"></button>
+					<button type="action" name="act_deftness_square_9" value="on"></button>
+					<button type="action" name="act_deftness_square_10" value="on"></button>
+					<button type="action" name="act_deftness_square_11" value="on"></button>
+					<button type="action" name="act_deftness_square_12" value="on"></button>
+					<button type="action" name="act_deftness_square_13" value="on"></button>
+					<button type="action" name="act_deftness_square_14" value="on"></button>
+					<button type="action" name="act_deftness_square_15" value="on"></button>
+					<button type="action" name="act_deftness_square_16" value="on"></button>
+					<button type="action" name="act_deftness_square_17" value="on"></button>
+					<button type="action" name="act_deftness_square_18" value="on"></button>
+					<button type="action" name="act_deftness_square_19" value="on"></button>
+					<button type="action" name="act_deftness_square_20" value="on"></button>
+				</div>
 				Bonuses/Penalties <input type="number" name="attr_deftness_modifier" value="0" />
 				<input type="hidden" name="attr_deftness_total" />
 
@@ -766,8 +772,28 @@
 				</div>
 				<!-- value="/roll d20<@{grit_total}" -->
 				<button type="action" name="act_grit"><span name="attr_grit_total"></span></button>
-				<input type="hidden" name="attr_grit_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
-				<span name="attr_grit_squares"></span>
+				<div class="sheet-squares">
+					<button type="action" name="act_grit_square_1" value="on"></button>
+					<button type="action" name="act_grit_square_2" value="on"></button>
+					<button type="action" name="act_grit_square_3" value="on"></button>
+					<button type="action" name="act_grit_square_4" value="on"></button>
+					<button type="action" name="act_grit_square_5" value="on"></button>
+					<button type="action" name="act_grit_square_6" value="on"></button>
+					<button type="action" name="act_grit_square_7" value="on"></button>
+					<button type="action" name="act_grit_square_8" value="on"></button>
+					<button type="action" name="act_grit_square_9" value="on"></button>
+					<button type="action" name="act_grit_square_10" value="on"></button>
+					<button type="action" name="act_grit_square_11" value="on"></button>
+					<button type="action" name="act_grit_square_12" value="on"></button>
+					<button type="action" name="act_grit_square_13" value="on"></button>
+					<button type="action" name="act_grit_square_14" value="on"></button>
+					<button type="action" name="act_grit_square_15" value="on"></button>
+					<button type="action" name="act_grit_square_16" value="on"></button>
+					<button type="action" name="act_grit_square_17" value="on"></button>
+					<button type="action" name="act_grit_square_18" value="on"></button>
+					<button type="action" name="act_grit_square_19" value="on"></button>
+					<button type="action" name="act_grit_square_20" value="on"></button>
+				</div>
 				Bonuses/Penalties <input type="number" name="attr_grit_modifier" value="0" />
 				<input type="hidden" name="attr_grit_total" />
 
@@ -784,8 +810,28 @@
 				</div>
 				<!-- value="/roll d20<@{insight_total}" -->
 				<button type="action" name="atc_insight"><span name="attr_insight_total"></span></button>
-				<input type="hidden" name="attr_insight_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
-				<span name="attr_insight_squares"></span>
+				<div class="sheet-squares">
+					<button type="action" name="act_insight_square_1" value="on"></button>
+					<button type="action" name="act_insight_square_2" value="on"></button>
+					<button type="action" name="act_insight_square_3" value="on"></button>
+					<button type="action" name="act_insight_square_4" value="on"></button>
+					<button type="action" name="act_insight_square_5" value="on"></button>
+					<button type="action" name="act_insight_square_6" value="on"></button>
+					<button type="action" name="act_insight_square_7" value="on"></button>
+					<button type="action" name="act_insight_square_8" value="on"></button>
+					<button type="action" name="act_insight_square_9" value="on"></button>
+					<button type="action" name="act_insight_square_10" value="on"></button>
+					<button type="action" name="act_insight_square_11" value="on"></button>
+					<button type="action" name="act_insight_square_12" value="on"></button>
+					<button type="action" name="act_insight_square_13" value="on"></button>
+					<button type="action" name="act_insight_square_14" value="on"></button>
+					<button type="action" name="act_insight_square_15" value="on"></button>
+					<button type="action" name="act_insight_square_16" value="on"></button>
+					<button type="action" name="act_insight_square_17" value="on"></button>
+					<button type="action" name="act_insight_square_18" value="on"></button>
+					<button type="action" name="act_insight_square_19" value="on"></button>
+					<button type="action" name="act_insight_square_20" value="on"></button>
+				</div>
 				Bonuses/Penalties <input type="number" name="attr_insight_modifier" value="0" />
 				<input type="hidden" name="attr_insight_total" />
 
@@ -802,8 +848,28 @@
 				</div>
 				<!-- value="/roll d20<@{aura_total}" -->
 				<button type="action" name="act_aura"><span name="attr_aura_total"></span></button>
-				<input type="hidden" name="attr_aura_squares" value="⬛⬛⬛⬛⬛⬛⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜" />
-				<span name="attr_aura_squares"></span>
+				<div class="sheet-squares">
+					<button type="action" name="act_aura_square_1" value="on"></button>
+					<button type="action" name="act_aura_square_2" value="on"></button>
+					<button type="action" name="act_aura_square_3" value="on"></button>
+					<button type="action" name="act_aura_square_4" value="on"></button>
+					<button type="action" name="act_aura_square_5" value="on"></button>
+					<button type="action" name="act_aura_square_6" value="on"></button>
+					<button type="action" name="act_aura_square_7" value="on"></button>
+					<button type="action" name="act_aura_square_8" value="on"></button>
+					<button type="action" name="act_aura_square_9" value="on"></button>
+					<button type="action" name="act_aura_square_10" value="on"></button>
+					<button type="action" name="act_aura_square_11" value="on"></button>
+					<button type="action" name="act_aura_square_12" value="on"></button>
+					<button type="action" name="act_aura_square_13" value="on"></button>
+					<button type="action" name="act_aura_square_14" value="on"></button>
+					<button type="action" name="act_aura_square_15" value="on"></button>
+					<button type="action" name="act_aura_square_16" value="on"></button>
+					<button type="action" name="act_aura_square_17" value="on"></button>
+					<button type="action" name="act_aura_square_18" value="on"></button>
+					<button type="action" name="act_aura_square_19" value="on"></button>
+					<button type="action" name="act_aura_square_20" value="on"></button>
+				</div>
 				Bonuses/Penalties <input type="number" name="attr_aura_modifier" value="0" />
 				<input type="hidden" name="attr_aura_total" />
 			</div>
