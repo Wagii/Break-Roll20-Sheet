@@ -93,12 +93,12 @@ h1 {
 	border-radius: 1px;
 }
 
-.sheet-squares input[value="off"] button {
+.sheet-squares input[value="off" i] button {
 	border: 1px solid #101010;
 	background-color: #f5f5f5;
 }
 
-.sheet-squares input[value="on"] button {
+.sheet-squares input[value="on" i] button {
 	border: 1px solid #101010;
 	background-color: #101010;
 }
