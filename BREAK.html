@@ -565,7 +565,6 @@
 		});
 	});
 
-	const damageButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `change:health_heart_${i}`).join(' ');
 	const hiddenHearts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `health_heart_${i}_hidden`).join(' ');
 	on("change:health_base change:health_modifier sheet:opened", function() {
 		getAttrs(["health_base", "health_modifier", "health_hearts"], function(values) {
@@ -594,6 +593,7 @@
 		});
 	});
 
+	const damageButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `change:health_heart_${i}`).join(' ');
 	on(`${damageButtons}`, function(eventInfo) {
 		const clicked = parseInt(eventInfo.sourceAttribute.replace("health_heart_", "")) || 3;
 		const output = {};
@@ -701,83 +701,99 @@
 			<div class="sheet-mainPageRightSide">
 				<!-- Aptitudes -->
 				<h1>Aptitudes</h1>
-				<h2 class="sheet-attribute">Might</h2>
-				Smash, crush, lift
-				<span>BASE</span><input type="number" name="attr_might_base" value="6" />
-				<span>TRAITS</span>
 				<div>
-					<span> -2</span><input type="radio" name="attr_might_trait" value="-2" />
-					<span> -1</span><input type="radio" name="attr_might_trait" value="-1" />
-					<span> 0</span><input type="radio" name="attr_might_trait" value="0" checked />
-					<span> 1</span><input type="radio" name="attr_might_trait" value="1" />
-					<span> 2</span><input type="radio" name="attr_might_trait" value="2" />
+					<div>
+						<h2 class="sheet-attribute">Might</h2>
+						<span>Smash, crush, lift</span>
+					</div>
+					<div>
+						<span>BASE</span>
+						<input type="number" name="attr_might_base" value="6" />
+					</div>
+					<div>
+						<input type="hidden" name="attr_might_total" />
+						<div>
+							<div>
+								<span>TRAITS</span>
+								<div>
+									<span> -2</span><input type="radio" name="attr_might_trait" value="-2" />
+									<span> -1</span><input type="radio" name="attr_might_trait" value="-1" />
+									<span> 0</span><input type="radio" name="attr_might_trait" value="0" checked />
+									<span> 1</span><input type="radio" name="attr_might_trait" value="1" />
+									<span> 2</span><input type="radio" name="attr_might_trait" value="2" />
+								</div>
+							</div>
+							<!-- value="/roll 1d20<@{might_total}" -->
+							<button type="action" name="act_might"><span name="attr_might_total"></span></button>
+							<div class="sheet-squares">
+								<input type="hidden" name="attr_might_square_1" value="on">
+									<button type="action" name="act_mightSquare1" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_2" value="on">
+									<button type="action" name="act_mightSquare2" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_3" value="on">
+									<button type="action" name="act_mightSquare3" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_4" value="on">
+									<button type="action" name="act_mightSquare4" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_5" value="on">
+									<button type="action" name="act_mightSquare5" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_6" value="on">
+									<button type="action" name="act_mightSquare6" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_7" value="off">
+									<button type="action" name="act_mightSquare7" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_8" value="off">
+									<button type="action" name="act_mightSquare8" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_9" value="off">
+									<button type="action" name="act_mightSquare9" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_10" value="off">
+									<button type="action" name="act_mightSquare10" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_11" value="off">
+									<button type="action" name="act_mightSquare11" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_12" value="off">
+									<button type="action" name="act_mightSquare12" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_13" value="off">
+									<button type="action" name="act_mightSquare13" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_14" value="off">
+									<button type="action" name="act_mightSquare14" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_15" value="off">
+									<button type="action" name="act_mightSquare15" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_16" value="off">
+									<button type="action" name="act_mightSquare16" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_17" value="off">
+									<button type="action" name="act_mightSquare17" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_18" value="off">
+									<button type="action" name="act_mightSquare18" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_19" value="off">
+									<button type="action" name="act_mightSquare19" class="sheet-square"></button>
+								</input>
+								<input type="hidden" name="attr_might_square_20" value="off">
+									<button type="action" name="act_mightSquare20" class="sheet-square"></button>
+								</input>
+							</div>
+							<div>
+								<span>Bonuses/Penalties</span>
+								<input type="number" name="attr_might_modifier" value="0" />
+							</div>
+						</div>
+					</div>
 				</div>
-				<!-- value="/roll 1d20<@{might_total}" -->
-				<button type="action" name="act_might"><span name="attr_might_total"></span></button>
-				<div class="sheet-squares">
-					<input type="hidden" name="attr_might_square_1" value="on">
-						<button type="action" name="act_mightSquare1"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_2" value="on">
-						<button type="action" name="act_mightSquare2"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_3" value="on">
-						<button type="action" name="act_mightSquare3"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_4" value="on">
-						<button type="action" name="act_mightSquare4"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_5" value="on">
-						<button type="action" name="act_mightSquare5"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_6" value="on">
-						<button type="action" name="act_mightSquare6"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_7" value="off">
-						<button type="action" name="act_mightSquare7"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_8" value="off">
-						<button type="action" name="act_mightSquare8"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_9" value="off">
-						<button type="action" name="act_mightSquare9"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_10" value="off">
-						<button type="action" name="act_mightSquare10"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_11" value="off">
-						<button type="action" name="act_mightSquare11"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_12" value="off">
-						<button type="action" name="act_mightSquare12"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_13" value="off">
-						<button type="action" name="act_mightSquare13"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_14" value="off">
-						<button type="action" name="act_mightSquare14"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_15" value="off">
-						<button type="action" name="act_mightSquare15"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_16" value="off">
-						<button type="action" name="act_mightSquare16"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_17" value="off">
-						<button type="action" name="act_mightSquare17"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_18" value="off">
-						<button type="action" name="act_mightSquare18"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_19" value="off">
-						<button type="action" name="act_mightSquare19"></button>
-					</input>
-					<input type="hidden" name="attr_might_square_20" value="off">
-						<button type="action" name="act_mightSquare20"></button>
-					</input>
-				</div>
-				Bonuses/Penalties <input type="number" name="attr_might_modifier" value="0" />
-				<input type="hidden" name="attr_might_total" />
 
 				<h2 class="sheet-attribute">Deftness</h2>
 				Dodge, sneak, leap
@@ -794,64 +810,64 @@
 				<button type="action" name="act_deftness"><span name="attr_deftness_total"></span></button>
 				<div class="sheet-squares">
 					<input type="hidden" name="attr_deftness_square_1" value="on">
-						<button type="action" name="act_deftnessSquare1"></button>
+						<button type="action" name="act_deftnessSquare1" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_2" value="on">
-						<button type="action" name="act_deftnessSquare2"></button>
+						<button type="action" name="act_deftnessSquare2" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_3" value="on">
-						<button type="action" name="act_deftnessSquare3"></button>
+						<button type="action" name="act_deftnessSquare3" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_4" value="on">
-						<button type="action" name="act_deftnessSquare4"></button>
+						<button type="action" name="act_deftnessSquare4" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_5" value="on">
-						<button type="action" name="act_deftnessSquare5"></button>
+						<button type="action" name="act_deftnessSquare5" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_6" value="on">
-						<button type="action" name="act_deftnessSquare6"></button>
+						<button type="action" name="act_deftnessSquare6" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_7" value="on">
-						<button type="action" name="act_deftnessSquare7"></button>
+						<button type="action" name="act_deftnessSquare7" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_8" value="on">
-						<button type="action" name="act_deftnessSquare8"></button>
+						<button type="action" name="act_deftnessSquare8" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_9" value="on">
-						<button type="action" name="act_deftnessSquare9"></button>
+						<button type="action" name="act_deftnessSquare9" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_10" value="on">
-						<button type="action" name="act_deftnessSquare10"></button>
+						<button type="action" name="act_deftnessSquare10" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_11" value="on">
-						<button type="action" name="act_deftnessSquare11"></button>
+						<button type="action" name="act_deftnessSquare11" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_12" value="on">
-						<button type="action" name="act_deftnessSquare12"></button>
+						<button type="action" name="act_deftnessSquare12" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_13" value="on">
-						<button type="action" name="act_deftnessSquare13"></button>
+						<button type="action" name="act_deftnessSquare13" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_14" value="on">
-						<button type="action" name="act_deftnessSquare14"></button>
+						<button type="action" name="act_deftnessSquare14" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_15" value="on">
-						<button type="action" name="act_deftnessSquare15"></button>
+						<button type="action" name="act_deftnessSquare15" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_16" value="on">
-						<button type="action" name="act_deftnessSquare16"></button>
+						<button type="action" name="act_deftnessSquare16" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_17" value="on">
-						<button type="action" name="act_deftnessSquare17"></button>
+						<button type="action" name="act_deftnessSquare17" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_18" value="on">
-						<button type="action" name="act_deftnessSquare18"></button>
+						<button type="action" name="act_deftnessSquare18" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_19" value="on">
-						<button type="action" name="act_deftnessSquare19"></button>
+						<button type="action" name="act_deftnessSquare19" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_deftness_square_20" value="on">
-						<button type="action" name="act_deftnessSquare20"></button>
+						<button type="action" name="act_deftnessSquare20" class="sheet-square"></button>
 					</input>
 				</div>
 				Bonuses/Penalties <input type="number" name="attr_deftness_modifier" value="0" />
@@ -872,64 +888,64 @@
 				<button type="action" name="act_grit"><span name="attr_grit_total"></span></button>
 				<div class="sheet-squares">
 					<input type="hidden" name="attr_grit_square_1" value="on">
-						<button type="action" name="act_gritSquare1" value="on"></button>
+						<button type="action" name="act_gritSquare1" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_2" value="on">
-						<button type="action" name="act_gritSquare2" value="on"></button>
+						<button type="action" name="act_gritSquare2" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_3" value="on">
-						<button type="action" name="act_gritSquare3" value="on"></button>
+						<button type="action" name="act_gritSquare3" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_4" value="on">
-						<button type="action" name="act_gritSquare4" value="on"></button>
+						<button type="action" name="act_gritSquare4" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_5" value="on">
-						<button type="action" name="act_gritSquare5" value="on"></button>
+						<button type="action" name="act_gritSquare5" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_6" value="on">
-						<button type="action" name="act_gritSquare6" value="on"></button>
+						<button type="action" name="act_gritSquare6" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_7" value="on">
-						<button type="action" name="act_gritSquare7" value="on"></button>
+						<button type="action" name="act_gritSquare7" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_8" value="on">
-						<button type="action" name="act_gritSquare8" value="on"></button>
+						<button type="action" name="act_gritSquare8" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_9" value="on">
-						<button type="action" name="act_gritSquare9" value="on"></button>
+						<button type="action" name="act_gritSquare9" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_10" value="on">
-						<button type="action" name="act_gritSquare10" value="on"></button>
+						<button type="action" name="act_gritSquare10" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_11" value="on">
-						<button type="action" name="act_gritSquare11" value="on"></button>
+						<button type="action" name="act_gritSquare11" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_12" value="on">
-						<button type="action" name="act_gritSquare12" value="on"></button>
+						<button type="action" name="act_gritSquare12" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_13" value="on">
-						<button type="action" name="act_gritSquare13" value="on"></button>
+						<button type="action" name="act_gritSquare13" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_14" value="on">
-						<button type="action" name="act_gritSquare14" value="on"></button>
+						<button type="action" name="act_gritSquare14" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_15" value="on">
-						<button type="action" name="act_gritSquare15" value="on"></button>
+						<button type="action" name="act_gritSquare15" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_16" value="on">
-						<button type="action" name="act_gritSquare16" value="on"></button>
+						<button type="action" name="act_gritSquare16" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_17" value="on">
-						<button type="action" name="act_gritSquare17" value="on"></button>
+						<button type="action" name="act_gritSquare17" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_18" value="on">
-						<button type="action" name="act_gritSquare18" value="on"></button>
+						<button type="action" name="act_gritSquare18" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_19" value="on">
-						<button type="action" name="act_gritSquare19" value="on"></button>
+						<button type="action" name="act_gritSquare19" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_grit_square_20" value="on">
-						<button type="action" name="act_gritSquare20" value="on"></button>
+						<button type="action" name="act_gritSquare20" class="sheet-square"></button>
 					</input>
 				</div>
 				Bonuses/Penalties <input type="number" name="attr_grit_modifier" value="0" />
@@ -950,64 +966,64 @@
 				<button type="action" name="atc_insight"><span name="attr_insight_total"></span></button>
 				<div class="sheet-squares">
 					<input type="hidden" name="attr_insight_square_1" value="on">
-					<button type="action" name="act_insightSquare1"></button>
+					<button type="action" name="act_insightSquare1" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_2" value="on">
-					<button type="action" name="act_insightSquare2"></button>
+					<button type="action" name="act_insightSquare2" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_3" value="on">
-					<button type="action" name="act_insightSquare3"></button>
+					<button type="action" name="act_insightSquare3" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_4" value="on">
-					<button type="action" name="act_insightSquare4"></button>
+					<button type="action" name="act_insightSquare4" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_5" value="on">
-					<button type="action" name="act_insightSquare5"></button>
+					<button type="action" name="act_insightSquare5" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_6" value="on">
-					<button type="action" name="act_insightSquare6"></button>
+					<button type="action" name="act_insightSquare6" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_7" value="on">
-					<button type="action" name="act_insightSquare7"></button>
+					<button type="action" name="act_insightSquare7" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_8" value="on">
-					<button type="action" name="act_insightSquare8"></button>
+					<button type="action" name="act_insightSquare8" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_9" value="on">
-					<button type="action" name="act_insightSquare9"></button>
+					<button type="action" name="act_insightSquare9" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_10" value="on">
-					<button type="action" name="act_insightSquare10"></button>
+					<button type="action" name="act_insightSquare10" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_11" value="on">
-					<button type="action" name="act_insightSquare11"></button>
+					<button type="action" name="act_insightSquare11" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_12" value="on">
-					<button type="action" name="act_insightSquare12"></button>
+					<button type="action" name="act_insightSquare12" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_13" value="on">
-					<button type="action" name="act_insightSquare13"></button>
+					<button type="action" name="act_insightSquare13" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_14" value="on">
-					<button type="action" name="act_insightSquare14"></button>
+					<button type="action" name="act_insightSquare14" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_15" value="on">
-					<button type="action" name="act_insightSquare15"></button>
+					<button type="action" name="act_insightSquare15" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_16" value="on">
-					<button type="action" name="act_insightSquare16"></button>
+					<button type="action" name="act_insightSquare16" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_17" value="on">
-					<button type="action" name="act_insightSquare17"></button>
+					<button type="action" name="act_insightSquare17" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_18" value="on">
-					<button type="action" name="act_insightSquare18"></button>
+					<button type="action" name="act_insightSquare18" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_19" value="on">
-					<button type="action" name="act_insightSquare19"></button>
+					<button type="action" name="act_insightSquare19" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_insight_square_20" value="on">
-					<button type="action" name="act_insightSquare20"></button>
+					<button type="action" name="act_insightSquare20" class="sheet-square"></button>
 					</input>
 				</div>
 				Bonuses/Penalties <input type="number" name="attr_insight_modifier" value="0" />
@@ -1028,64 +1044,64 @@
 				<button type="action" name="act_aura"><span name="attr_aura_total"></span></button>
 				<div class="sheet-squares">
 					<input type="hidden" name="attr_aura_square_1" value="on">
-						<button type="action" name="act_auraSquare1"></button>
+						<button type="action" name="act_auraSquare1" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_2" value="on">
-						<button type="action" name="act_auraSquare2"></button>
+						<button type="action" name="act_auraSquare2" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_3" value="on">
-						<button type="action" name="act_auraSquare3"></button>
+						<button type="action" name="act_auraSquare3" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_4" value="on">
-						<button type="action" name="act_auraSquare4"></button>
+						<button type="action" name="act_auraSquare4" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_5" value="on">
-						<button type="action" name="act_auraSquare5"></button>
+						<button type="action" name="act_auraSquare5" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_6" value="on">
-						<button type="action" name="act_auraSquare6"></button>
+						<button type="action" name="act_auraSquare6" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_7" value="on">
-						<button type="action" name="act_auraSquare7"></button>
+						<button type="action" name="act_auraSquare7" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_8" value="on">
-						<button type="action" name="act_auraSquare8"></button>
+						<button type="action" name="act_auraSquare8" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_9" value="on">
-						<button type="action" name="act_auraSquare9"></button>
+						<button type="action" name="act_auraSquare9" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_10" value="on">
-						<button type="action" name="act_auraSquare10"></button>
+						<button type="action" name="act_auraSquare10" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_11" value="on">
-						<button type="action" name="act_auraSquare11"></button>
+						<button type="action" name="act_auraSquare11" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_12" value="on">
-						<button type="action" name="act_auraSquare12"></button>
+						<button type="action" name="act_auraSquare12" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_13" value="on">
-						<button type="action" name="act_auraSquare13"></button>
+						<button type="action" name="act_auraSquare13" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_14" value="on">
-						<button type="action" name="act_auraSquare14"></button>
+						<button type="action" name="act_auraSquare14" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_15" value="on">
-						<button type="action" name="act_auraSquare15"></button>
+						<button type="action" name="act_auraSquare15" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_16" value="on">
-						<button type="action" name="act_auraSquare16"></button>
+						<button type="action" name="act_auraSquare16" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_17" value="on">
-						<button type="action" name="act_auraSquare17"></button>
+						<button type="action" name="act_auraSquare17" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_18" value="on">
-						<button type="action" name="act_auraSquare18"></button>
+						<button type="action" name="act_auraSquare18" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_19" value="on">
-						<button type="action" name="act_auraSquare19"></button>
+						<button type="action" name="act_auraSquare19" class="sheet-square"></button>
 					</input>
 					<input type="hidden" name="attr_aura_square_20" value="on">
-						<button type="action" name="act_auraSquare20"></button>
+						<button type="action" name="act_auraSquare20" class="sheet-square"></button>
 					</input>
 				</div>
 				Bonuses/Penalties <input type="number" name="attr_aura_modifier" value="0" />
