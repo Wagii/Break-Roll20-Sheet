@@ -132,6 +132,10 @@ div.sheet-attributeBase {
 	background-color: none;
 }
 
+.sheet-attributeBase>span {
+	text-transform: uppercase;
+}
+
 .sheet-smallCircleInput {
 	width: 20px;
 	height: 20px;
