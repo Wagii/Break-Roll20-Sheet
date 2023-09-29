@@ -1304,15 +1304,24 @@
 						<h2>Speed rating</h2>
 						<span>Decides how many Areas I can move</span>
 						<div> <!-- Row -->
+							<!-- TODO : Change these radio button by a set of chechboxes -->
+							<!-- NOTE : Selected should be just either colored background or thicc border -->
 							<input type="radio" name="attr_speed_rating" value="0" />
 							<input type="radio" name="attr_speed_rating" value="1" checked />
 							<input type="radio" name="attr_speed_rating" value="2" />
 							<input type="radio" name="attr_speed_rating" value="3" />
 						</div>
-
+						<div> <!-- Row -->
+							<div>
+								<span>Base</span>
+								<input type="text" name="attr_speed_rating_name" value="Average" />
+							</div>
+							<div>
+								<span>Bonuses/Penalties</span>
+								<input type="number" name="attr_speed_rating_modifier" value="0" />
+							</div>
+						</div>
 					</div>
-					Base <input type="text" name="attr_speed_rating_name" value="Average" />
-					Bonuses/Penalties <input type="number" name="attr_speed_rating_modifier" value="0" />
 				</div>
 			</div>
 		</div>
