@@ -686,8 +686,8 @@
 <div>
 	<input type="hidden" class="sheet-tabstoggle" name="attr_sheetTab" value="stats" />
 	<div>
-		<button type="action" class="toggle-button" name="act_stats">Stats</button>
-		<button type="action" class="toggle-button" name="act_notes">Notes</button>
+		<button type="action" class="sheet-tabButton" name="act_stats">Stats</button>
+		<button type="action" class="sheet-tabButton" name="act_notes">Notes</button>
 	</div>
 	<div class="sheet-stats">
 		<div class="sheet-mainPageUpperSide">
@@ -823,7 +823,7 @@
 						<!-- value="/roll d20<@{deftness_total}" -->
 						<div>
 							<div class="sheet-statButtons">
-								<button type="action" name="act_deftness">
+								<button type="action" name="act_deftness" class="sheet-attributeButton">
 									<span name="attr_deftness_total"></span>
 								</button>
 								<div>
@@ -1126,81 +1126,81 @@
 								<button type="action" name="act_aura" class="sheet-attributeButton">
 									<span name="attr_aura_total"></span>
 								</button>
-							</div>
-							<div>
-								<div class="sheet-traitsList">
-									<span><b>TRAITS</b></span>
-									<div><span>-2</span><input type="radio" name="attr_aura_trait" value="-2" /></div>
-									<div><span>-1</span><input type="radio" name="attr_aura_trait" value="-1" /></div>
-									<div><span>0</span><input type="radio" name="attr_aura_trait" value="0" checked /></div>
-									<div><span>1</span><input type="radio" name="attr_aura_trait" value="1" /></div>
-									<div><span>2</span><input type="radio" name="attr_aura_trait" value="2" /></div>
-								</div>
-								<div class="sheet-squares">
-									<input type="hidden" name="attr_aura_square_1" value="on">
-										<button type="action" name="act_auraSquare1" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_2" value="on">
-										<button type="action" name="act_auraSquare2" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_3" value="on">
-										<button type="action" name="act_auraSquare3" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_4" value="on">
-										<button type="action" name="act_auraSquare4" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_5" value="on">
-										<button type="action" name="act_auraSquare5" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_6" value="on">
-										<button type="action" name="act_auraSquare6" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_7" value="on">
-										<button type="action" name="act_auraSquare7" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_8" value="on">
-										<button type="action" name="act_auraSquare8" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_9" value="on">
-										<button type="action" name="act_auraSquare9" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_10" value="on">
-										<button type="action" name="act_auraSquare10" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_11" value="on">
-										<button type="action" name="act_auraSquare11" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_12" value="on">
-										<button type="action" name="act_auraSquare12" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_13" value="on">
-										<button type="action" name="act_auraSquare13" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_14" value="on">
-										<button type="action" name="act_auraSquare14" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_15" value="on">
-										<button type="action" name="act_auraSquare15" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_16" value="on">
-										<button type="action" name="act_auraSquare16" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_17" value="on">
-										<button type="action" name="act_auraSquare17" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_18" value="on">
-										<button type="action" name="act_auraSquare18" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_19" value="on">
-										<button type="action" name="act_auraSquare19" class="sheet-square"></button>
-									</input>
-									<input type="hidden" name="attr_aura_square_20" value="on">
-										<button type="action" name="act_auraSquare20" class="sheet-square"></button>
-									</input>
-								</div>
-								<div class="sheet-attributeModifier">
-									<span>Bonuses/Penalties</span>
-									<input type="number" name="attr_aura_modifier" value="0" />
+								<div>
+									<div class="sheet-traitsList">
+										<span><b>TRAITS</b></span>
+										<div><span>-2</span><input type="radio" name="attr_aura_trait" value="-2" /></div>
+										<div><span>-1</span><input type="radio" name="attr_aura_trait" value="-1" /></div>
+										<div><span>0</span><input type="radio" name="attr_aura_trait" value="0" checked /></div>
+										<div><span>1</span><input type="radio" name="attr_aura_trait" value="1" /></div>
+										<div><span>2</span><input type="radio" name="attr_aura_trait" value="2" /></div>
+									</div>
+									<div class="sheet-squares">
+										<input type="hidden" name="attr_aura_square_1" value="on">
+											<button type="action" name="act_auraSquare1" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_2" value="on">
+											<button type="action" name="act_auraSquare2" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_3" value="on">
+											<button type="action" name="act_auraSquare3" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_4" value="on">
+											<button type="action" name="act_auraSquare4" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_5" value="on">
+											<button type="action" name="act_auraSquare5" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_6" value="on">
+											<button type="action" name="act_auraSquare6" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_7" value="on">
+											<button type="action" name="act_auraSquare7" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_8" value="on">
+											<button type="action" name="act_auraSquare8" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_9" value="on">
+											<button type="action" name="act_auraSquare9" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_10" value="on">
+											<button type="action" name="act_auraSquare10" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_11" value="on">
+											<button type="action" name="act_auraSquare11" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_12" value="on">
+											<button type="action" name="act_auraSquare12" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_13" value="on">
+											<button type="action" name="act_auraSquare13" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_14" value="on">
+											<button type="action" name="act_auraSquare14" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_15" value="on">
+											<button type="action" name="act_auraSquare15" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_16" value="on">
+											<button type="action" name="act_auraSquare16" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_17" value="on">
+											<button type="action" name="act_auraSquare17" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_18" value="on">
+											<button type="action" name="act_auraSquare18" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_19" value="on">
+											<button type="action" name="act_auraSquare19" class="sheet-square"></button>
+										</input>
+										<input type="hidden" name="attr_aura_square_20" value="on">
+											<button type="action" name="act_auraSquare20" class="sheet-square"></button>
+										</input>
+									</div>
+									<div class="sheet-attributeModifier">
+										<span>Bonuses/Penalties</span>
+										<input type="number" name="attr_aura_modifier" value="0" />
+									</div>
 								</div>
 							</div>
 						</div>
@@ -1210,16 +1210,16 @@
 		</div>
 		<div>
 			<!-- Lower -->
-			<div> <!-- Row Wrap -->
-				<!-- Combat values -->
-				<h1>Combat Values</h1>
-				<div> <!-- Column -->
-					<div>
-						<div> <!-- Column -->
+			<!-- Combat values -->
+			<h1>Combat Values</h1>
+			<div class="sheet-flexRow sheet-2Row"> <!-- Row Wrap -->
+				<div class="sheet-flexColumn sheet-flexGrow"> <!-- Column -->
+					<div class="sheet-flexRow">
+						<div class="sheet-flexColumn"> <!-- Column -->
 							<h2>Attack bonus</h2>
 							<span>Add to my attack rolls</span>
 						</div>
-						<div> <!-- Row flex end -->
+						<div class="sheet-flexRowInvert"> <!-- Row flex end -->
 							<span>Base</span>
 							<input type="number" name="attr_attack_bonus" value="0" class="sheet-smallCircleInput" />
 						</div>
@@ -1227,17 +1227,17 @@
 					<!-- Carac -->
 					<input type="hidden" name="attr_attack_bonus_total" value="0" />
 					<input type="hidden" name="attr_attack_bonus_withPlus" />
-					<div> <!-- Row -->
+					<div class="sheet-flexRow"> <!-- Row -->
 						<button type="roll" name="roll_attack_bonus" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
-						<div> <!-- Column -->
+						<div class="sheet-flexColumn"> <!-- Column -->
 							<span>Bonuses/Penalties</span>
-							<input type="number" name="attr_attack_bonus_modifier" /> <!-- Grow 1 -->
+							<input type="number" name="attr_attack_bonus_modifier" class="sheet-flexGrow" /> <!-- Grow 1 -->
 						</div>
 					</div>
 				</div>
-				<div> <!-- Column -->
-					<div> <!-- Row -->
-						<div> <!-- Column -->
+				<div class="sheet-flexColumn sheet-flexGrow"> <!-- Column -->
+					<div class="sheet-flexRow"> <!-- Row -->
+						<div class="sheet-flexColumn"> <!-- Column -->
 							<h2>Health total</h2>
 							<span>Protecting me from injuriy</span>
 						</div>
@@ -1277,29 +1277,29 @@
 						</div>
 					</div>
 				</div>
-				<div>
+				<div class="sheet-flexColumn sheet-flexGrow">
 					<input type="hidden" name="attr_defense_rating_total" value="10" />
-					<div> <!-- Column -->
-						<div> <!-- Row -->
-							<div> <!-- Column -->
+					<div class="sheet-flexColumn"> <!-- Column -->
+						<div class="sheet-flexRow"> <!-- Row -->
+							<div class="sheet-flexColumn"> <!-- Column -->
 								<h2>Defense rating</h2>
 								<span>Best this to strike me</span>
 							</div>
-							<div> <!-- Row -->
+							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Base</span>
 								<input type="number" name="attr_defense_rating" value="10" class="sheet-smallCircleInput" />
 							</div>
 						</div>
-						<div> <!-- Row -->
+						<div class="sheet-flexRow"> <!-- Row -->
 							<button type="action" name="roll_defense_rating"><span name="attr_defense_rating_total"></span></button>
-							<div> <!-- Column -->
+							<div class="sheet-flexColumn"> <!-- Column -->
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_defense_rating_modifier" value="0" />
 							</div>
 						</div>
 					</div>
 				</div>
-				<div>
+				<div class="sheet-flexColumn sheet-flexGrow">
 					<div> <!-- Column -->
 						<h2>Speed rating</h2>
 						<span>Decides how many Areas I can move</span>

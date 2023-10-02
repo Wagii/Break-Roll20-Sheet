@@ -18,6 +18,16 @@ span {
 
 /**** tabs handler ***/
 /*Configure the tab buttons*/
+.sheet-stats,
+.sheet-notes {
+	display: block;
+}
+
+.sheet-tabsToggle[value="stats"] ~ div.sheet-stats,
+.sheet-tabsToggle[value="notes"] ~ div.sheet-notes {
+	display: block;
+}
+
 /* show the selected tab */
 
 /**** sheet ***/
@@ -89,6 +99,55 @@ div.sheet-attributeBase {
 	flex-grow: 1;
 	flex-shrink: 0;
 	gap: 5px;
+}
+
+.sheet-flexRow {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 5px;
+}
+
+.sheet-flexColumn {
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	gap: 5px;
+}
+
+.sheet-flexRowInvert {
+	display: flex;
+	flex-flow: row-reverse nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 5px;
+}
+
+.sheet-flexColumnInvert {
+	display: flex;
+	flex-flow: column-reverse nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	gap: 5px;
+}
+
+.sheet-flexGrow {
+	width: 100%;
+	border: #101010 1px solid;
+}
+
+.sheet-2Row {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 2%;
+}
+
+.sheet-2Row div {
+	flex: 50%;
 }
 
 /*Content*/
