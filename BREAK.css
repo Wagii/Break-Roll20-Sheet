@@ -252,6 +252,20 @@ div.sheet-attributeBase {
 	background-color: #101010;
 }
 
-input.health-heart[value="off"] {
+.health-heart[value="off"] {
 	display: none;
 }
+
+.health-heart[value="on"] {
+	display: flex;
+}
+
+.health-heart[value=0] {
+	display: flex;
+}
+
+.sheet-leftSeparation {
+	border-left: 2px solid #d3d3d3;
+	padding-left: 4px;
+}
+

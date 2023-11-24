@@ -571,7 +571,6 @@
 		});
 	});
 
-	const hiddenHearts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `health_heart_${i}_hidden`).join(' ');
 	on("change:health_base change:health_modifier sheet:opened", function() {
 		getAttrs(["health_base", "health_modifier", "health_hearts"], function(values) {
 			const output = {};
@@ -594,7 +593,6 @@
 				output["health_hearts"] = total;
 			}
 
-			console.log(output);
 			setAttrs(output, {silent: true});
 		});
 	});
@@ -609,7 +607,7 @@
 			output[`health_heart_${i}`] = (i < clicked) ? "on" : 0;
 		}
 
-		output["health_hearts"] = clicked - (eventInfo.newValue == "on" ? 0 : 1);
+		output["health_hearts"] = clicked - (eventInfo.newValue == "on" ? 1 : 0);
 
 		setAttrs(output, {silent: true});
 	});
@@ -620,8 +618,11 @@
 			const total = parseInt(values["health_total"])||0;
 			const output = {};
 
-			for (let i = 1; i <= total; i++) {
-				output[`health_heart_${i}`] = (i <= hearts) ? "on" : 0;
+			for (let i = 1; i <= 10; i++) {
+				if (i <= total)
+					output[`health_heart_${i}`] = (i <= hearts) ? "on" : 0;
+				else
+					output[`health_heart_${i}`] = "off";
 			}
 
 			if (hearts > total) {
@@ -701,7 +702,7 @@
 				<div class="sheet-oneLineInfo"><span>Homeland</span><input type="text" name="attr_homeland" /></div>
 				<div class="sheet-oneLineInfo"><span>Languages</span><input type="text" name="attr_languages" value="Low speech" /></div>
 				<div class="sheet-oneLineInfo"><span>History</span><input type="text" name="attr_history" /></div>
-				<div class="sheet-multiLineInfo"><span>Purviews</span><textarea name="attr_purviews">My background grants me an Edge on...</textarea></div>
+				<div class="sheet-multiLineInfo"><span>Purviews</span><textarea name="attr_purviews">My background grants me a minor bonus on...</textarea></div>
 				<div class="sheet-multiLineInfo"><span>Description</span><textarea name="attr_description"></textarea></div>
 			</div>
 			<div class="sheet-mainPageRightSide">
@@ -915,7 +916,7 @@
 						</div>
 						<div class="sheet-attributeBase">
 							<span>Base</span>
-							<input type="number" name="attr_grit_base" value="6" />
+							<input type="number" name="attr_grit_base" value="6" class="sheet-smallCircleInput" />
 						</div>
 					</div>
 					<div>
@@ -1246,31 +1247,31 @@
 							<input type="number" name="attr_health_base" value="2" />
 						</div>
 					</div>
-					<div> <!-- Row -->
+					<div class="sheet-flexRow"> <!-- Row -->
 						<input type="hidden" name="attr_health_total" value="2" />
 						<button type="action" name="action_health"><span name="attr_health_total"></span></button>
-						<div> <!-- Column -->
-							<div> <!-- Row -->
+						<div class="sheet-flexColumn"> <!-- Column -->
+							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Hearts</span>
 								<input type="number" name="attr_health_hearts" value="2" />/<span name="attr_health_total"></span>
+								<div class="sheet-flexRow sheet-leftSeparation">
+									<input type="checkbox" class="health-heart" name="attr_health_heart_1" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_2" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_3" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_4" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_5" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_6" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_7" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_8" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_9" />
+									<input type="checkbox" class="health-heart" name="attr_health_heart_10" />
+								</div>
 							</div>
-							<div> <!-- Row -->
-								<input type="checkbox" class="health-heart" name="attr_health_heart_1" value="on" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_2" value="on" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_3" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_4" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_5" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_6" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_7" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_8" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_9" value="off" />
-								<input type="checkbox" class="health-heart" name="attr_health_heart_10" value="off" />
-							</div>
-							<div> <!-- Row -->
+							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_health_modifier" value="0" />
 							</div>
-							<div> <!-- Row -->
+							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Injury</span>
 								<input type="text" name="attr_injuries" />
 							</div>
