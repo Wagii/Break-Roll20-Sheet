@@ -18,20 +18,29 @@ span {
 
 /**** tabs handler ***/
 /*Configure the tab buttons*/
-.sheet-stats,
-.sheet-notes {
-	display: block;
+.sheet-stats, .sheet-notes {
+	display: none;
 }
 
-.sheet-tabsToggle[value="stats"] ~ div.sheet-stats,
-.sheet-tabsToggle[value="notes"] ~ div.sheet-notes {
-	display: block;
+.sheet-tabstoggle[value="stats"]~div.sheet-stats,
+.sheet-tabstoggle[value="notes"]~div.sheet-notes {
+	display: flex;
 }
 
 /* show the selected tab */
 
 /**** sheet ***/
 /*Sheet layout*/
+.sheet-stats {
+	flex-flow: column wrap;
+	justify-content: flex-start;
+}
+
+.sheet-notes {
+	flex-flow: column wrap;
+	justify-content: flex-start;
+}
+
 .sheet-mainPageUpperSide {
 	display: flex;
 	flex-flow: row wrap;
@@ -146,8 +155,8 @@ div.sheet-attributeBase {
 	gap: 2%;
 }
 
-.sheet-2Row div {
-	flex: 50%;
+.sheet-2Row>div {
+	flex: 49%;
 }
 
 /*Content*/
@@ -242,12 +251,12 @@ div.sheet-attributeBase {
 	border-radius: 1px;
 }
 
-.sheet-squares input[value="off" i] .sheet-square {
+.sheet-squares input[value="0" i] .sheet-square {
 	border: 1px solid #101010;
 	background-color: #f5f5f5;
 }
 
-.sheet-squares input[value="on" i] .sheet-square {
+.sheet-squares input[value="1" i] .sheet-square {
 	border: 1px solid #101010;
 	background-color: #101010;
 }

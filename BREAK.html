@@ -9,6 +9,9 @@
 			setAttrs({
 				sheetTab: button
 			});
+			getAttrs(["sheetTab"], function(values) {
+				console.log(values["sheetTab"]);
+			});
 		});
 	});
 
@@ -24,7 +27,7 @@
 			output["might_total"] = might_total;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`might_square_${i}`] = (i <= might_total) ? "on" : "off";
+				output[`might_square_${i}`] = (i <= might_total) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: false});
@@ -43,7 +46,7 @@
 			output["deftness_total"] = deftness_total;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`deftness_square_${i}`] = (i <= deftness_total) ? "on" : "off";
+				output[`deftness_square_${i}`] = (i <= deftness_total) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -59,7 +62,7 @@
 			+ parseInt(values["grit_modifier"])||0;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`grit_square_${i}`] = (i <= output["grit_total"]) ? "on" : "off";
+				output[`grit_square_${i}`] = (i <= output["grit_total"]) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -75,7 +78,7 @@
 			+ parseInt(values["insight_modifier"])||0;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`insight_square_${i}`] = (i <= output["insight_total"]) ? "on" : "off";
+				output[`insight_square_${i}`] = (i <= output["insight_total"]) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -91,7 +94,7 @@
 			+ parseInt(values["aura_modifier"])||0;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`aura_square_${i}`] = (i <= output["aura_total"]) ? "on" : "off";
+				output[`aura_square_${i}`] = (i <= output["aura_total"]) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -690,8 +693,9 @@
 		<button type="action" class="sheet-tabButton" name="act_stats">Stats</button>
 		<button type="action" class="sheet-tabButton" name="act_notes">Notes</button>
 	</div>
+
 	<div class="sheet-stats">
-		<div class="sheet-mainPageUpperSide">
+		<div class="sheet-mainPageUpperSide sheet-2Row">
 			<!-- Upper -->
 			<div class="sheet-mainPageLeftSide">
 				<!-- Identity -->
@@ -737,64 +741,64 @@
 										<div><span>2</span><input type="radio" name="attr_might_trait" value="2" /></div>
 									</div>
 									<div class="sheet-squares">
-										<input type="hidden" name="attr_might_square_1" value="on">
+										<input type="hidden" name="attr_might_square_1" value=1>
 											<button type="action" name="act_mightSquare1" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_2" value="on">
+										<input type="hidden" name="attr_might_square_2" value=1>
 											<button type="action" name="act_mightSquare2" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_3" value="on">
+										<input type="hidden" name="attr_might_square_3" value=1>
 											<button type="action" name="act_mightSquare3" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_4" value="on">
+										<input type="hidden" name="attr_might_square_4" value=1>
 											<button type="action" name="act_mightSquare4" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_5" value="on">
+										<input type="hidden" name="attr_might_square_5" value=1>
 											<button type="action" name="act_mightSquare5" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_6" value="on">
+										<input type="hidden" name="attr_might_square_6" value=1>
 											<button type="action" name="act_mightSquare6" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_7" value="off">
+										<input type="hidden" name="attr_might_square_7" value=0>
 											<button type="action" name="act_mightSquare7" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_8" value="off">
+										<input type="hidden" name="attr_might_square_8" value=0>
 											<button type="action" name="act_mightSquare8" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_9" value="off">
+										<input type="hidden" name="attr_might_square_9" value=0>
 											<button type="action" name="act_mightSquare9" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_10" value="off">
+										<input type="hidden" name="attr_might_square_10" value=0>
 											<button type="action" name="act_mightSquare10" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_11" value="off">
+										<input type="hidden" name="attr_might_square_11" value=0>
 											<button type="action" name="act_mightSquare11" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_12" value="off">
+										<input type="hidden" name="attr_might_square_12" value=0>
 											<button type="action" name="act_mightSquare12" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_13" value="off">
+										<input type="hidden" name="attr_might_square_13" value=0>
 											<button type="action" name="act_mightSquare13" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_14" value="off">
+										<input type="hidden" name="attr_might_square_14" value=0>
 											<button type="action" name="act_mightSquare14" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_15" value="off">
+										<input type="hidden" name="attr_might_square_15" value=0>
 											<button type="action" name="act_mightSquare15" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_16" value="off">
+										<input type="hidden" name="attr_might_square_16" value=0>
 											<button type="action" name="act_mightSquare16" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_17" value="off">
+										<input type="hidden" name="attr_might_square_17" value=0>
 											<button type="action" name="act_mightSquare17" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_18" value="off">
+										<input type="hidden" name="attr_might_square_18" value=0>
 											<button type="action" name="act_mightSquare18" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_19" value="off">
+										<input type="hidden" name="attr_might_square_19" value=0>
 											<button type="action" name="act_mightSquare19" class="sheet-square"></button>
 										</input>
-										<input type="hidden" name="attr_might_square_20" value="off">
+										<input type="hidden" name="attr_might_square_20" value=0>
 											<button type="action" name="act_mightSquare20" class="sheet-square"></button>
 										</input>
 									</div>
@@ -1328,44 +1332,48 @@
 		</div>
 	</div>
 	<div class="sheet-notes">
-		<div>
-			<!-- Notes -->
-			<h1>Quirk</h1>
-			<input type="text" name="attr_quirk" />
-			<textarea name="attr_quirk_notes"></textarea>
-			<h1>Abilities</h1>
-			<fieldset class="repeating_abilities">
-				<input type="text" name="ability_name" />
-				<textarea name="ability_notes"></textarea>
-			</fieldset>
-			<h1>Rank & XP</h1>
-			Rank <input type="number" name="attr_rank" />
-			Current XP <input type="number" name="attr_xp_current" />
-			XP for next rank <input type="number" name="attr_xp_next" />
-			<h1>Allegiance</h1>
-			Dark <input type="number" name="attr_allegiance_dark" />
-			Bright <input type="number" name="attr_allegiance_bright" />
-			<input type="radio" name="attr_alignment" value="None" />
-			<input type="radio" name="attr_alignment" value="Dark" />
-			<input type="radio" name="attr_alignment" value="Twiligth" />
-			<input type="radio" name="attr_alignment" value="Dark" />
-			Gifts <textarea name="attr_gifts"></textarea>
-			<h1>Inventory</h1>
-			Base <input type="number" name="attr_inventory_base" />
-			Bonuses/Penalties <input type="number" name="attr_inventory_modifier" />
-			<input type="hidden" name="attr_inventory_total" />
-			<button type="roll" name="roll_inventory"><span name="attr_inventory_total"></span></button>
-			<input type="hidden" name="attr_inventory_left" />
-			<button type="roll" name="roll_inventory_left"><span name="attr_inventory_left"></span></button>
-			<fieldset class="repeating_inventory">
-			<input type="text" name="inventory_name" />
-			<input type="number" name="inventory_size" />
-			<textarea name="inventory_notes"></textarea>
-			</fieldset>
-			<h1>Wealth</h1>
-			Stones <input type="number" name="attr_wealth_stones" />
-			Coins <input type="number" name="attr_wealth_coins" />
-			Gems <input type="number" name="attr_wealth_gems" />
+		<div class="sheet-2Row">
+			<div class="sheet-flexColumn">
+				<!-- Notes -->
+				<h1>Quirk</h1>
+				<input type="text" name="attr_quirk" />
+				<textarea name="attr_quirk_notes"></textarea>
+				<h1>Abilities</h1>
+				<fieldset class="repeating_abilities">
+					<input type="text" name="ability_name" />
+					<textarea name="ability_notes"></textarea>
+				</fieldset>
+				<h1>Rank & XP</h1>
+				Rank <input type="number" name="attr_rank" />
+				Current XP <input type="number" name="attr_xp_current" />
+				XP for next rank <input type="number" name="attr_xp_next" />
+				<h1>Allegiance</h1>
+				Dark <input type="number" name="attr_allegiance_dark" />
+				Bright <input type="number" name="attr_allegiance_bright" />
+				<input type="radio" name="attr_alignment" value="None" />
+				<input type="radio" name="attr_alignment" value="Dark" />
+				<input type="radio" name="attr_alignment" value="Twiligth" />
+				<input type="radio" name="attr_alignment" value="Dark" />
+				Gifts <textarea name="attr_gifts"></textarea>
+			</div>
+			<div class="sheet-flexColumn">
+				<h1>Inventory</h1>
+				Base <input type="number" name="attr_inventory_base" />
+				Bonuses/Penalties <input type="number" name="attr_inventory_modifier" />
+				<input type="hidden" name="attr_inventory_total" />
+				<button type="roll" name="roll_inventory"><span name="attr_inventory_total"></span></button>
+				<input type="hidden" name="attr_inventory_left" />
+				<button type="roll" name="roll_inventory_left"><span name="attr_inventory_left"></span></button>
+				<fieldset class="repeating_inventory">
+				<input type="text" name="inventory_name" />
+				<input type="number" name="inventory_size" />
+				<textarea name="inventory_notes"></textarea>
+				</fieldset>
+				<h1>Wealth</h1>
+				Stones <input type="number" name="attr_wealth_stones" />
+				Coins <input type="number" name="attr_wealth_coins" />
+				Gems <input type="number" name="attr_wealth_gems" />
+			</div>
 		</div>
 		<div>
 			Notes <textarea name="attr_notes"></textarea>
