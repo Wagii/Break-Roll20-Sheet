@@ -265,11 +265,8 @@ div.sheet-attributeBase {
 	display: none;
 }
 
-.health-heart[value="on"] {
-	display: flex;
-}
-
-.health-heart[value=0] {
+.health-heart[value="on"],
+.health-heart[value="0"] {
 	display: flex;
 }
 
@@ -278,3 +275,8 @@ div.sheet-attributeBase {
 	padding-left: 4px;
 }
 
+.sheet-attributeBox {
+	border: 1px solid #d3d3d3;
+	padding: 4px;
+	margin-bottom: 4px;
+}
