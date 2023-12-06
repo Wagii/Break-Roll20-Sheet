@@ -1272,14 +1272,14 @@
 			<!-- Lower -->
 			<!-- Combat values -->
 			<h1>Combat Values</h1>
-			<div class="sheet-flexRow sheet-2Row"> <!-- Row Wrap -->
-				<div class="sheet-flexColumn sheet-flexGrow"> <!-- Column -->
-					<div class="sheet-flexRow">
+			<div class="sheet-boxes sheet-2Row"> <!-- Row Wrap -->
+				<div class="sheet-flexColumn"> <!-- Column -->
+					<div class="sheet-flexRow sheet-2RowNoGap">
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<h2>Attack bonus</h2>
 							<span>Add to my attack rolls</span>
 						</div>
-						<div class="sheet-flexRowInvert"> <!-- Row flex end -->
+						<div class="sheet-flexRow sheet-flexEnd sheet-flexGrow"> <!-- Row flex end -->
 							<span>Base</span>
 							<input type="number" name="attr_attack_bonus" value="0" class="sheet-smallCircleInput" />
 						</div>
@@ -1291,11 +1291,11 @@
 						<button type="roll" name="roll_attack_bonus" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<span>Bonuses/Penalties</span>
-							<input type="number" name="attr_attack_bonus_modifier" class="sheet-flexGrow" /> <!-- Grow 1 -->
+							<input type="number" name="attr_attack_bonus_modifier" class="sheet-flexGrowFull" /> <!-- Grow 1 -->
 						</div>
 					</div>
 				</div>
-				<div class="sheet-flexColumn sheet-flexGrow"> <!-- Column -->
+				<div class="sheet-flexColumn"> <!-- Column -->
 					<div class="sheet-flexRow"> <!-- Row -->
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<h2>Health total</h2>
@@ -1337,7 +1337,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="sheet-flexColumn sheet-flexGrow">
+				<div class="sheet-flexColumn">
 					<input type="hidden" name="attr_defense_rating_total" value="10" />
 					<div class="sheet-flexColumn"> <!-- Column -->
 						<div class="sheet-flexRow"> <!-- Row -->
@@ -1359,7 +1359,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="sheet-flexColumn sheet-flexGrow">
+				<div class="sheet-flexColumn">
 					<div class="sheet-flexColumn"> <!-- Column -->
 						<h2>Speed rating</h2>
 						<span>Decides how many Areas I can move</span>

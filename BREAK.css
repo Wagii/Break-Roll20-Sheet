@@ -34,6 +34,7 @@ span {
 .sheet-stats {
 	flex-flow: column wrap;
 	justify-content: flex-start;
+	align-items: flex-start;
 }
 
 .sheet-notes {
@@ -118,6 +119,11 @@ div.sheet-attributeBase {
 	gap: 5px;
 }
 
+.sheet-flexEnd {
+	display: flex;
+	justify-content: flex-end;
+}
+
 .sheet-flexColumn {
 	display: flex;
 	flex-flow: column nowrap;
@@ -143,8 +149,11 @@ div.sheet-attributeBase {
 }
 
 .sheet-flexGrow {
+	flex-grow: 1;
+}
+
+.sheet-flexGrowFull {
 	width: 100%;
-	border: #101010 1px solid;
 }
 
 .sheet-2Row {
@@ -157,6 +166,19 @@ div.sheet-attributeBase {
 
 .sheet-2Row>div {
 	flex: 49%;
+}
+
+.sheet-2RowNoGap {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+
+.sheet-boxes>div {
+	border: 1px solid #d3d3d3;
+	padding: 4px;
+	margin-bottom: 4px;
 }
 
 /*Content*/
