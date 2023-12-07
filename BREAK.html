@@ -1288,7 +1288,7 @@
 					<input type="hidden" name="attr_attack_bonus_total" value="0" />
 					<input type="hidden" name="attr_attack_bonus_withPlus" />
 					<div class="sheet-flexRow"> <!-- Row -->
-						<button type="roll" name="roll_attack_bonus" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
+						<button type="roll" name="roll_attack_bonus" class="sheet-attributeButton" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<span>Bonuses/Penalties</span>
 							<input type="number" name="attr_attack_bonus_modifier" class="sheet-flexGrowFull" /> <!-- Grow 1 -->
@@ -1308,7 +1308,7 @@
 					</div>
 					<div class="sheet-flexRow"> <!-- Row -->
 						<input type="hidden" name="attr_health_total" value="2" />
-						<button type="action" name="action_health"><span name="attr_health_total"></span></button>
+						<button type="action" class="sheet-attributeButton" name="action_health"><span name="attr_health_total"></span></button>
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Hearts</span>
@@ -1351,7 +1351,7 @@
 							</div>
 						</div>
 						<div class="sheet-flexRow"> <!-- Row -->
-							<button type="action" name="roll_defense_rating"><span name="attr_defense_rating_total"></span></button>
+							<button type="action" class="sheet-attributeButton" name="roll_defense_rating"><span name="attr_defense_rating_total"></span></button>
 							<div class="sheet-flexColumn"> <!-- Column -->
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_defense_rating_modifier" value="0" />
