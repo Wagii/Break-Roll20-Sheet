@@ -1366,10 +1366,22 @@
 						<div class="sheet-flexRow"> <!-- Row -->
 							<!-- TODO : Change these radio button by a set of chechboxes -->
 							<!-- NOTE : Selected should be just either colored background or thicc border -->
-							<input type="radio" name="attr_speed_rating" value="0" />
-							<input type="radio" name="attr_speed_rating" value="1" checked />
-							<input type="radio" name="attr_speed_rating" value="2" />
-							<input type="radio" name="attr_speed_rating" value="3" />
+							<input type="checkbox" name="attr_speed_rating" value="0">
+								<span>Slow</span>
+								<span>0 Area</span>
+							</input>
+							<input type="checkbox" name="attr_speed_rating" value="1" checked>
+								<span>Average</span>
+								<span>1 Area</span>						
+							</input>
+							<input type="checkbox" name="attr_speed_rating" value="2">
+								<span>Fast</span>
+								<span>2 Area</span>
+							</input>
+							<input type="checkbox" name="attr_speed_rating" value="3">
+								<span>Very Fast</span>
+								<span>2 Area</span>
+							</input>
 						</div>
 						<div class="sheet-flexRow"> <!-- Row -->
 							<div>
@@ -1390,44 +1402,136 @@
 		<div class="sheet-2Row">
 			<div class="sheet-flexColumn">
 				<!-- Notes -->
-				<h1>Quirk</h1>
-				<input type="text" name="attr_quirk" />
-				<textarea name="attr_quirk_notes"></textarea>
-				<h1>Abilities</h1>
-				<fieldset class="repeating_abilities">
-					<input type="text" name="ability_name" />
-					<textarea name="ability_notes"></textarea>
-				</fieldset>
-				<h1>Rank & XP</h1>
-				Rank <input type="number" name="attr_rank" />
-				Current XP <input type="number" name="attr_xp_current" />
-				XP for next rank <input type="number" name="attr_xp_next" />
-				<h1>Allegiance</h1>
-				Dark <input type="number" name="attr_allegiance_dark" />
-				Bright <input type="number" name="attr_allegiance_bright" />
-				<input type="radio" name="attr_alignment" value="None" />
-				<input type="radio" name="attr_alignment" value="Dark" />
-				<input type="radio" name="attr_alignment" value="Twiligth" />
-				<input type="radio" name="attr_alignment" value="Dark" />
-				Gifts <textarea name="attr_gifts"></textarea>
+				<div>
+					<h1>Allegiance</h1>
+					<div class="sheet-flexRow">
+						<div class="sheet-flexGrow">
+							<div class="sheet-flexRow">
+								<input type="number" name="attr_allegiance_dark" />
+								<span>
+									Dark<br>
+									Allegiance<br>
+									Points
+								</span>
+							</div>
+							<div class="sheet-flexRow">
+								<input type="number" name="attr_allegiance_bright" />
+								<span>
+									Bright<br>
+									Allegiance<br>
+									Points
+								</span>
+							</div>
+						</div>
+						<div class="sheet-flexGrow sheet-flexColumn">
+							<div class="sheet-flexRow">
+								<input type="radio" name="attr_alignment" value="None" />
+								<span>None</span>
+							</div>
+							<div class="sheet-flexRow">
+								<input type="radio" name="attr_alignment" value="Dark" />
+								<span>Dark</span>
+							</div>
+							<div class="sheet-flexRow">
+								<input type="radio" name="attr_alignment" value="Twilight" />
+								<span>Twilight</span>
+							</div>
+							<div class="sheet-flexRow">
+								<input type="radio" name="attr_alignment" value="Light" />
+								<span>Light</span>
+							</div>
+						</div>
+						<div class="sheet-flexGrow">
+							<span>Gifts</span>
+							<textarea name="attr_gifts"></textarea>
+						</div>
+					</div>
+				</div>
+				<div>
+					<h1>Rank & XP</h1>
+					<div class="sheet-flexRow">
+						<div class="sheet-flexGrow">
+							<span>Rank</span>
+							<input type="number" name="attr_rank" />
+						</div>
+						<div class="sheet-flexGrow">
+							<span>Current XP</span>
+							<input type="number" name="attr_xp_current" />
+						</div>
+						<div class="sheet-flexGrow">
+							<span>XP for next rank</span>
+							<input type="number" name="attr_xp_next" />
+						</div>
+					</div>
+				</div>
+				<div>
+					<h1>Quirk</h1>
+					<input type="text" name="attr_quirk" />
+					<textarea name="attr_quirk_notes"></textarea>
+				</div>
+				<div>
+					<h1>Abilities</h1>
+					<fieldset class="repeating_abilities">
+						<input type="text" name="ability_name" />
+						<textarea name="ability_notes"></textarea>
+					</fieldset>
+				</div>
 			</div>
 			<div class="sheet-flexColumn">
-				<h1>Inventory</h1>
-				Base <input type="number" name="attr_inventory_base" />
-				Bonuses/Penalties <input type="number" name="attr_inventory_modifier" />
-				<input type="hidden" name="attr_inventory_total" />
-				<button type="roll" name="roll_inventory"><span name="attr_inventory_total"></span></button>
-				<input type="hidden" name="attr_inventory_left" />
-				<button type="roll" name="roll_inventory_left"><span name="attr_inventory_left"></span></button>
-				<fieldset class="repeating_inventory">
-				<input type="text" name="inventory_name" />
-				<input type="number" name="inventory_size" />
-				<textarea name="inventory_notes"></textarea>
-				</fieldset>
-				<h1>Wealth</h1>
-				Stones <input type="number" name="attr_wealth_stones" />
-				Coins <input type="number" name="attr_wealth_coins" />
-				Gems <input type="number" name="attr_wealth_gems" />
+				<div>
+					<h1>Wealth</h1>
+					<div class="sheet-flexRow">
+						<div class="sheet-flexGrow">
+							<span>Stones</span> 
+							<input type="number" name="attr_wealth_stones" value="0" />
+						</div>
+						<div class="sheet-flexGrow">
+							<span>Coins</span> 
+							<input type="number" name="attr_wealth_coins" value="0" />
+						</div>
+						<div class="sheet-flexGrow">
+							<span>Gems</span>
+							<input type="number" name="attr_wealth_gems" value="0" />
+						</div>
+					</div>
+				</div>
+				<div>
+					<h1>Inventory</h1>
+					<div class="sheet-flexRow">
+						<div class="sheet-flexGrow sheet-flexColumn">
+							<div>
+								<input type="hidden" name="attr_inventory_total" value="10" />
+								<button type="roll" name="roll_inventory"><span name="attr_inventory_total"></span></button>
+								<span>Inventory slots</span>
+							</div>
+							<div>
+								<input type="hidden" name="attr_inventory_left" value="10" />
+								<button type="roll" name="roll_inventory_left"><span name="attr_inventory_left"></span></button>
+								<span>Inventory left</span>
+							</div>
+						</div>
+						<div class="sheet-flexGrow sheet-flexEnd sheet-flexColumn">
+							<div class="sheet-flexEnd">
+								<span>Base</span>
+								<input type="number" name="attr_inventory_base" />
+							</div>
+							<div class="sheet-flexEnd">
+								<span>Bonuses/Penalties</span>
+								<input type="number" name="attr_inventory_modifier" />
+							</div>
+						</div>
+					</div>
+					<div>
+						<fieldset class="repeating_inventory">
+							<div>
+								<input type="text" name="inventory_name" />
+								<span>Inventory size</span>
+								<input type="number" name="inventory_size" />
+							</div>
+							<textarea name="inventory_notes"></textarea>
+						</fieldset>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div>
