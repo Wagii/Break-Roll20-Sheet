@@ -629,6 +629,15 @@
 		});
 	});
 
+	on("clicked:health", function() {
+		getAttrs(["health_total"], function(values) {
+			var healthTotal = parseInt(values["health_total"])||0;
+			var output = {};
+			output["health_hearts"] = healthTotal;
+			setAttrs(output, {silent: false});
+		});
+	});
+
 	on("change:health_base change:health_modifier sheet:opened", function() {
 		getAttrs(["health_base", "health_modifier", "health_hearts"], function(values) {
 			const output = {};
@@ -640,11 +649,11 @@
 			output["health_total"] = total;
 
 			for (let i = 1; i <= total; i++) {
-				output[`health_heart_${i}`] = (i <= hearts) ? "on" : 0;
+				output[`health_heart_${i}`] = (i <= hearts) ? 1 : 0;
 			}
 
 			for (let i = total + 1; i <= 10; i++) {
-				output[`health_heart_${i}`] = "off";
+				output[`health_heart_${i}`] = -1;
 			}
 
 			if (hearts > total) {
@@ -655,19 +664,22 @@
 		});
 	});
 
-	const damageButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `change:health_heart_${i}`).join(' ');
+	const damageButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `clicked:health_heart_${i}`).join(' ');
 	on(`${damageButtons}`, function(eventInfo) {
-		const clicked = parseInt(eventInfo.sourceAttribute.replace("health_heart_", "")) || 3;
-		const output = {};
-
-		for (let i = 1; i <= 10; i++) {
-			if (i == clicked) continue;
-			output[`health_heart_${i}`] = (i < clicked) ? "on" : 0;
-		}
-
-		output["health_hearts"] = clicked - (eventInfo.newValue == "on" ? 0 : 1);
-
-		setAttrs(output, {silent: true});
+		getAttrs(["health_heart_1", "health_heart_2", "health_heart_3", "health_heart_4", "health_heart_5", "health_heart_6", "health_heart_7", "health_heart_8", "health_heart_9", "health_heart_10"], function(values) {
+			const clicked = parseInt(eventInfo.sourceAttribute.replace("health_heart_", "")) || 3;
+			const lastValue = values[eventInfo.sourceAttribute];
+			const output = {};
+	
+			for (let i = 1; i <= 10; i++) {
+				if (i == clicked) continue;
+				output[`health_heart_${i}`] = (i < clicked) ? 1 : 0;
+			}
+	
+			output["health_hearts"] = clicked - (lastValue == "1" ? 1 : 0);
+	
+			setAttrs(output, {silent: true});
+		});
 	});
 
 	on("change:health_hearts", function() {
@@ -678,9 +690,9 @@
 
 			for (let i = 1; i <= 10; i++) {
 				if (i <= total)
-					output[`health_heart_${i}`] = (i <= hearts) ? "on" : 0;
+					output[`health_heart_${i}`] = (i <= hearts) ? 1 : 0;
 				else
-					output[`health_heart_${i}`] = "off";
+					output[`health_heart_${i}`] = -1;
 			}
 
 			if (hearts > total) {
@@ -741,6 +753,51 @@
 	});
 
 	// TODO : Add Inventory computation
+	on("change:inventory_base change:inventory_modifier sheet:opened", function() {
+		getAttrs(["inventory_base", "inventory_modifier"], function(values) {
+			var output = {};
+			var inventory = parseInt(values["inventory_base"])||0;
+			var modifier = parseInt(values["inventory_modifier"])||0;
+			var total = inventory + modifier;
+			output["inventory_total"] = total;
+
+			setAttrs(output, {silent: false});
+		});
+	});
+
+	const repeatingSum = (destinations, section, fields) => {
+		if (!Array.isArray(destinations)) destinations = [destinations.replace(/\s/g, '').split(',')];
+		if (!Array.isArray(fields)) fields = [fields.replace(/\s/g, '').split(',')];
+		getSectionIDs(`repeating_${section}`, idArray => {
+			const attrArray = idArray.reduce((m, id) => [...m, ...(fields.map(field => `repeating_${section}_${id}_${field}`))], []);
+			getAttrs([...attrArray], v => {
+				const getValue = (section, id, field) => v[`repeating_${section}_${id}_${field}`] === 'on' ? 1 : parseFloat(v[`repeating_${section}_${id}_${field}`]) || 0;
+				const commonMultipliers = (fields.length <= destinations.length) ? [] : fields.splice(destinations.length, fields.length - destinations.length);
+				const output = {};
+				destinations.forEach((destination, index) => {
+					output[destination] = idArray.reduce((total, id) => total + getValue(section, id, fields[index]) * commonMultipliers.reduce((subtotal, mult) => subtotal * getValue(section, id, mult), 1), 0);
+				});
+				setAttrs(output, {silent: false});
+			}); 
+		}); 
+	};
+
+	on("change:repeating_inventory change:repeating_inventory:inventory_size change:repeating_inventory:inventory_quantity remove:repeating_inventory", function() {
+		repeatingSum("total_weight", 'inventory', ['inventory_size', 'inventory_quantity']);
+	});
+
+	on("change:total_weight change:inventory_total", function() {
+		getAttrs(["total_weight", "inventory_total"], function(values) {
+			var output = {};
+			var total_weight = parseInt(values["total_weight"])||0;
+			var inventory_total = parseInt(values["inventory_total"])||0;
+			
+			output["inventory_left"] = inventory_total - total_weight;
+			
+			setAttrs(output, {silent: false});
+		});
+	});
+
 </script>
 
 <html>
@@ -1310,22 +1367,42 @@
 					</div>
 					<div class="sheet-flexRow"> <!-- Row -->
 						<input type="hidden" name="attr_health_total" value="2" />
-						<button type="action" class="sheet-attributeButton" name="action_health"><span name="attr_health_total"></span></button>
+						<button type="action" class="sheet-attributeButton" name="act_health"><span name="attr_health_total"></span></button>
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Hearts</span>
 								<input type="number" name="attr_health_hearts" value="2" />/<span name="attr_health_total"></span>
 								<div class="sheet-flexRow sheet-leftSeparation">
-									<input type="checkbox" class="health-heart" name="attr_health_heart_1" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_2" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_3" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_4" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_5" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_6" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_7" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_8" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_9" />
-									<input type="checkbox" class="health-heart" name="attr_health_heart_10" />
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_1" value="1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_1"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_2" value="1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_2"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_3" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_3"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_4" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_4"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_5" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_5"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_6" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_6"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_7" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_7"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_8" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_8"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_9" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_9"></button>
+									</input>
+									<input type="hidden" class="health-heart-input" name="attr_health_heart_10" value="-1" >
+										<button type="action" class="health-heart sheet-square" name="act_health_heart_10"></button>
+									</input>
 								</div>
 							</div>
 							<div class="sheet-flexRow"> <!-- Row -->
@@ -1407,9 +1484,9 @@
 				<div>
 					<h1>Allegiance</h1>
 					<div class="sheet-flexRow">
-						<div class="sheet-flexGrow">
+						<div class="sheet-flexGrow sheet-rightSeparation">
 							<div class="sheet-flexRow">
-								<input type="number" name="attr_allegiance_dark" />
+								<input type="number" name="attr_allegiance_dark" value="0" />
 								<span>
 									Dark<br>
 									Allegiance<br>
@@ -1417,7 +1494,7 @@
 								</span>
 							</div>
 							<div class="sheet-flexRow">
-								<input type="number" name="attr_allegiance_bright" />
+								<input type="number" name="attr_allegiance_bright" value="0" />
 								<span>
 									Bright<br>
 									Allegiance<br>
@@ -1425,7 +1502,7 @@
 								</span>
 							</div>
 						</div>
-						<div class="sheet-flexGrow sheet-flexColumn">
+						<div class="sheet-flexGrow sheet-flexColumn sheet-rightSeparation">
 							<div class="sheet-flexRow">
 								<input type="radio" name="attr_alignment" value="None" />
 								<span>None</span>
@@ -1454,15 +1531,15 @@
 					<div class="sheet-flexRow">
 						<div class="sheet-flexGrow">
 							<span>Rank</span>
-							<input type="number" name="attr_rank" />
+							<input type="number" name="attr_rank" value="1" />
 						</div>
 						<div class="sheet-flexGrow">
 							<span>Current XP</span>
-							<input type="number" name="attr_xp_current" />
+							<input type="number" name="attr_xp_current" value="0" />
 						</div>
 						<div class="sheet-flexGrow">
 							<span>XP for next rank</span>
-							<input type="number" name="attr_xp_next" />
+							<input type="number" name="attr_xp_next" value="6" />
 						</div>
 					</div>
 				</div>
@@ -1524,13 +1601,16 @@
 						</div>
 					</div>
 					<div>
+						<input type="hidden" name="attr_total_weight" value="0" />
 						<fieldset class="repeating_inventory">
 							<div>
-								<input type="text" name="inventory_name" />
-								<span>Inventory size</span>
-								<input type="number" name="inventory_size" />
+								<input type="text" name="attr_inventory_name" />
+								<span>Object size</span>
+								<input type="number" name="attr_inventory_size" value="1"/>
+								<span>Quantity</span>
+								<input type="number" name="attr_inventory_quantity" value="1"/>
 							</div>
-							<textarea name="inventory_notes"></textarea>
+							<textarea name="attr_inventory_notes"></textarea>
 						</fieldset>
 					</div>
 				</div>

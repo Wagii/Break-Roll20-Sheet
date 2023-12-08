@@ -283,13 +283,18 @@ div.sheet-attributeBase {
 	border-radius: 1px;
 }
 
-.health-heart[value="off"] {
-	display: none;
+.health-heart {
+	display: flex;
 }
 
-.health-heart[value="on"],
-.health-heart[value="0"] {
-	display: flex;
+.health-heart-input[value="1"]~.health-heart {
+	background-color: black;
+}
+.health-heart-input[value="0"]~.health-heart {
+	background-color: white;
+}
+.health-heart-input[value="-1"]~.health-heart {
+	display: none;
 }
 
 .sheet-leftSeparation {
@@ -301,4 +306,9 @@ div.sheet-attributeBase {
 	border: 1px solid #d3d3d3;
 	padding: 4px;
 	margin-bottom: 4px;
+}
+
+.sheet-rightSeparation {
+	border-right: 2px solid black;
+	padding-right: 4px;
 }
