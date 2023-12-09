@@ -703,50 +703,48 @@
 		});
 	});
 
-	on("change:defense_rating change:defense_rating_modifier change:speed_rating sheet:opened", function() {
-		getAttrs(["defense_rating", "defense_rating_modifier", "speed_rating"], function(values) {
+	on("change:defense_rating change:defense_rating_modifier change:speed_rating_total sheet:opened", function() {
+		getAttrs(["defense_rating", "defense_rating_modifier", "speed_rating_total"], function(values) {
+			var output = {};
 			var base = parseInt(values["defense_rating"])||0;
 			var modifier = parseInt(values["defense_rating_modifier"])||0;
-			var speed = parseInt(values["speed_rating"])||0;
+			var speed = parseInt(values["speed_rating_total"])||0;
+
 			var speed_defense_modifier = 0;
-			if (speed == 0 || speed == 1) {
+			if (speed <= 1) {
 				speed_defense_modifier = 0;
 			} else if (speed == 2) {
 				speed_defense_modifier = 2;
-			} else if (speed == 3) {
+			} else if (speed >= 3) {
 				speed_defense_modifier = 4;
 			}
 			var total = base + modifier + speed_defense_modifier;
-			setAttrs({
-				"defense_rating_total": total
-			});
+
+			output["defense_rating_total"] = total;
+
+			setAttrs(output, {silent: true});
 		});
 	});
 
-	on("change:speed_rating_name change:speed_rating_modifier sheet:opened", function() {
-		getAttrs(["speed_rating_name", "speed_rating_modifier"], function(values) {
+	on("change:speed_rating change:speed_rating_modifier", function() {
+		getAttrs(["speed_rating", "speed_rating_modifier"], function(values) {
 			var output = {};
-			var speed_name = values["speed_rating_name"];
-			var speed_modifier = parseInt(values["speed_rating_modifier"])||0;
-			var speed = 0;
-			if (speed_name === "Slow") {
-				speed = 0;
-			} else if (speed_name === "Average") {
-				speed = 1;
-			} else if (speed_name === "Fast") {
-				speed = 2;
-			} else if (speed_name === "Very Fast") {
-				speed = 3;
-			}
+			var base = parseInt(values["speed_rating"])||0;
+			var modifier = parseInt(values["speed_rating_modifier"])||0;
+			var total = base + modifier;
 
-			speed += speed_modifier;
-			if (speed < 0) {
-				speed = 0;
-			} else if (speed > 3) {
-				speed = 3;
-			}
-
-			output["speed_rating"] = speed;
+			var speed_rating_name = "";
+			if (total <= 0)
+				speed_rating_name = "Slow";
+			else if (total == 1)
+				speed_rating_name = "Average";
+			else if (total == 2)
+				speed_rating_name = "Fast";
+			else if (total >= 3)
+				speed_rating_name = "Very Fast";
+			
+			output["speed_rating_name"] = speed_rating_name;
+			output["speed_rating_total"] = total;
 
 			setAttrs(output, {silent: false});
 		});
@@ -809,9 +807,9 @@
 	</div>
 
 	<div class="sheet-stats">
-		<div class="sheet-mainPageUpperSide sheet-2Row">
+		<div class="sheet-mainPageUpperSide">
 			<!-- Upper -->
-			<div class="sheet-mainPageLeftSide">
+			<div class="sheet-mainPageLeftSide sheet-flexGrow">
 				<!-- Identity -->
 				<h1>Identity</h1>
 				<div class="sheet-oneLineInfo"><span>Name</span><input type="text" name="attr_character_name" /></div>
@@ -823,7 +821,7 @@
 				<div class="sheet-multiLineInfo"><span>Purviews</span><textarea name="attr_purviews">My background grants me a minor bonus on...</textarea></div>
 				<div class="sheet-multiLineInfo"><span>Description</span><textarea name="attr_description"></textarea></div>
 			</div>
-			<div class="sheet-mainPageRightSide">
+			<div class="sheet-mainPageRightSide sheet-flexGrow">
 				<!-- Aptitudes -->
 				<h1>Aptitudes</h1>
 				<div class="sheet-attributeBox">
@@ -1331,7 +1329,7 @@
 			<!-- Lower -->
 			<!-- Combat values -->
 			<h1>Combat Values</h1>
-			<div class="sheet-boxes sheet-2Row"> <!-- Row Wrap -->
+			<div class="sheet-boxes sheet-2Row sheet-stretch"> <!-- Row Wrap -->
 				<div class="sheet-flexColumn"> <!-- Column -->
 					<div class="sheet-flexRow sheet-2RowNoGap">
 						<div class="sheet-flexColumn"> <!-- Column -->
@@ -1463,13 +1461,15 @@
 							</input>
 						</div>
 						<div class="sheet-flexRow"> <!-- Row -->
-							<div>
-								<span>Base</span>
-								<input type="text" name="attr_speed_rating_name" value="Average" />
-							</div>
+							<input type="hidden" name="attr_speed_rating_total" value="1" />
 							<div>
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_speed_rating_modifier" value="0" />
+							</div>
+							<div>
+								<span>Total</span>
+								<input type="hidden" name="attr_speed_rating_name" value="Average" />
+								<span name="attr_speed_rating_name" class="sheet-bold"></span>
 							</div>
 						</div>
 					</div>

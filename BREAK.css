@@ -45,8 +45,9 @@ span {
 .sheet-mainPageUpperSide {
 	display: flex;
 	flex-flow: row wrap;
-	justify-content: space-between;
+	justify-content: stretch;
 	gap: 20px;
+	width: 100%;
 }
 
 .sheet-mainPageLeftSide {
@@ -156,6 +157,12 @@ div.sheet-attributeBase {
 	width: 100%;
 }
 
+.sheet-stretch {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: stretch;
+}
+
 .sheet-2Row {
 	display: flex;
 	flex-flow: row wrap;
@@ -165,7 +172,9 @@ div.sheet-attributeBase {
 }
 
 .sheet-2Row>div {
-	flex: 49%;
+	flex-grow: 1;
+	flex-shrink: 1;
+	width: 48%;
 }
 
 .sheet-2RowNoGap {
@@ -311,4 +320,8 @@ div.sheet-attributeBase {
 .sheet-rightSeparation {
 	border-right: 2px solid black;
 	padding-right: 4px;
+}
+
+.sheet-bold {
+	font-weight: bold;
 }
