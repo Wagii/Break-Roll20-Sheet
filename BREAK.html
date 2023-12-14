@@ -53,13 +53,16 @@
 	on("change:grit_base change:grit_trait change:grit_modifier sheet:opened", function() {
 		getAttrs(["grit_base", "grit_trait", "grit_modifier"], function(values) {
 			var output = {};
+			var grit_total = 0;
 
-			output["grit_total"] = parseInt(values["grit_base"])||6
-			+ parseInt(values["grit_trait"])||0
-			+ parseInt(values["grit_modifier"])||0;
+			grit_total = parseInt(values["grit_base"])||6;
+			grit_total += parseInt(values["grit_trait"])||0;
+			grit_total += parseInt(values["grit_modifier"])||0;
+
+			output["grit_total"] = grit_total;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`gritSquare${i}`] = (i <= output["grit_total"]) ? 1 : 0;
+				output[`gritSquare${i}`] = (i <= grit_total) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -69,13 +72,16 @@
 	on("change:insight_base change:insight_trait change:insight_modifier sheet:opened", function() {
 		getAttrs(["insight_base", "insight_trait", "insight_modifier"], function(values) {
 			var output = {};
+			var insight_total = 0;
 
-			output["insight_total"] = parseInt(values["insight_base"])||6
-			+ parseInt(values["insight_trait"])||0
-			+ parseInt(values["insight_modifier"])||0;
+			insight_total = parseInt(values["insight_base"])||6;
+			insight_total += parseInt(values["insight_trait"])||0;
+			insight_total += parseInt(values["insight_modifier"])||0;
+
+			output["insight_total"] = insight_total;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`insightSquare${i}`] = (i <= output["insight_total"]) ? 1 : 0;
+				output[`insightSquare${i}`] = (i <= insight_total) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -85,13 +91,16 @@
 	on("change:aura_base change:aura_trait change:aura_modifier sheet:opened", function() {
 		getAttrs(["aura_base", "aura_trait", "aura_modifier"], function(values) {
 			var output = {};
+			var aura_total = 0;
 
-			output["aura_total"] = parseInt(values["aura_base"])||6
-			+ parseInt(values["aura_trait"])||0
-			+ parseInt(values["aura_modifier"])||0;
+			aura_total = parseInt(values["aura_base"])||6;
+			aura_total += parseInt(values["aura_trait"])||0;
+			aura_total += parseInt(values["aura_modifier"])||0;
+
+			output["aura_total"] = aura_total;
 
 			for (let i = 1; i <= 20; i++) {
-				output[`auraSquare${i}`] = (i <= output["aura_total"]) ? 1 : 0;
+				output[`auraSquare${i}`] = (i <= aura_total) ? 1 : 0;
 			}
 
 			setAttrs(output, {silent: true});
@@ -666,17 +675,23 @@
 
 	const damageButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `clicked:health_heart_${i}`).join(' ');
 	on(`${damageButtons}`, function(eventInfo) {
-		getAttrs(["health_heart_1", "health_heart_2", "health_heart_3", "health_heart_4", "health_heart_5", "health_heart_6", "health_heart_7", "health_heart_8", "health_heart_9", "health_heart_10"], function(values) {
-			const clicked = parseInt(eventInfo.sourceAttribute.replace("health_heart_", "")) || 3;
-			const lastValue = values[eventInfo.sourceAttribute];
+		const triggerName = eventInfo.triggerName.replace("clicked:", "");
+		const eventSource = triggerName.replace("health_heart_", "");
+		const getAttrsParameters = ["health_total", triggerName]
+		getAttrs(getAttrsParameters, function(values) {
+			const clicked = parseInt(eventSource) || 3;
+			const lastValue = values[triggerName];
+			const total = parseInt(values["health_total"])||0;
 			const output = {};
-	
-			for (let i = 1; i <= 10; i++) {
+
+			for (let i = 1; i <= total; i++) {
 				if (i == clicked) continue;
-				output[`health_heart_${i}`] = (i < clicked) ? 1 : 0;
+				output[`health_heart_${i}`] = (i < clicked) ? "1" : "0";
 			}
+
+			output[`health_heart_${clicked}`] = (lastValue == "1") ? "0" : "1";
 	
-			output["health_hearts"] = clicked - (lastValue == "1" ? 1 : 0);
+			output["health_hearts"] = clicked - (lastValue == "1" ? "1" : "0");
 	
 			setAttrs(output, {silent: true});
 		});
@@ -690,9 +705,9 @@
 
 			for (let i = 1; i <= 10; i++) {
 				if (i <= total)
-					output[`health_heart_${i}`] = (i <= hearts) ? 1 : 0;
+					output[`health_heart_${i}`] = (i <= hearts) ? "1" : "0";
 				else
-					output[`health_heart_${i}`] = -1;
+					output[`health_heart_${i}`] = "-1";
 			}
 
 			if (hearts > total) {
@@ -726,7 +741,19 @@
 		});
 	});
 
-	on("change:speed_rating change:speed_rating_modifier", function() {
+	const speedButtons = [0, 1, 2, 3].map(i => `clicked:speed_rating_${i}`).join(' ');
+	on(speedButtons, function(eventInfo) {
+		var output = {};
+		const eventSource = eventInfo.triggerName.replace("clicked:speed_rating_", "");
+		const eventSourceInt = parseInt(eventSource) || 1;
+
+		output["speed_rating"] = eventSourceInt;
+		output["speed_rating_modifier"] = 0;
+
+		setAttrs(output, {silent: false});
+	});
+
+	on("change:speed_rating change:speed_rating_modifier", function(eventInfo) {
 		getAttrs(["speed_rating", "speed_rating_modifier"], function(values) {
 			var output = {};
 			var base = parseInt(values["speed_rating"])||0;
@@ -809,7 +836,7 @@
 	<div class="sheet-stats">
 		<div class="sheet-mainPageUpperSide">
 			<!-- Upper -->
-			<div class="sheet-mainPageLeftSide sheet-flexGrow">
+			<div class="sheet-flexIdentity sheet-flexColumnNoGap">
 				<!-- Identity -->
 				<h1>Identity</h1>
 				<div class="sheet-oneLineInfo"><span>Name</span><input type="text" name="attr_character_name" /></div>
@@ -821,10 +848,10 @@
 				<div class="sheet-multiLineInfo"><span>Purviews</span><textarea name="attr_purviews">My background grants me a minor bonus on...</textarea></div>
 				<div class="sheet-multiLineInfo"><span>Description</span><textarea name="attr_description"></textarea></div>
 			</div>
-			<div class="sheet-mainPageRightSide sheet-flexGrow">
+			<div class="sheet-flexIdentity sheet-flexColumnNoGap">
 				<!-- Aptitudes -->
 				<h1>Aptitudes</h1>
-				<div class="sheet-attributeBox">
+				<div class="sheet-box">
 					<div class="sheet-attributeHeader">
 						<div>
 							<h2 class="sheet-attribute">Might</h2>
@@ -924,7 +951,7 @@
 					</div>
 				</div>
 
-				<div class="sheet-attributeBox">
+				<div class="sheet-box">
 					<div class="sheet-attributeHeader">
 						<div>
 							<h2 class="sheet-attribute">Deftness</h2>
@@ -1024,7 +1051,7 @@
 					</div>
 				</div>
 
-				<div class="sheet-attributeBox">
+				<div class="sheet-box">
 					<div class="sheet-attributeHeader">
 						<div>
 							<h2 class="sheet-attribute">Grit</h2>
@@ -1124,7 +1151,7 @@
 					</div>
 				</div>
 
-				<div class="sheet-attributeBox">
+				<div class="sheet-box">
 					<div class="sheet-attributeHeader">
 						<div>
 							<h2 class="sheet-attribute">Insigth</h2>
@@ -1224,7 +1251,7 @@
 					</div>
 				</div>
 
-				<div class="sheet-attributeBox">
+				<div class="sheet-box">
 					<div class="sheet-attributeHeader">
 						<div>
 							<h2 class="sheet-attribute">Aura</h2>
@@ -1325,18 +1352,18 @@
 				</div>
 			</div>
 		</div>
-		<div>
+		<div class="sheet-flexGrowFull">
 			<!-- Lower -->
 			<!-- Combat values -->
 			<h1>Combat Values</h1>
-			<div class="sheet-boxes sheet-2Row sheet-stretch"> <!-- Row Wrap -->
-				<div class="sheet-flexColumn"> <!-- Column -->
-					<div class="sheet-flexRow sheet-2RowNoGap">
+			<div class="sheet-2Row"> <!-- Row Wrap -->
+				<div class="sheet-flexColumn sheet-box sheet-2RowItem"> <!-- Column -->
+					<div class="sheet-flexRowNoGap">
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<h2>Attack bonus</h2>
 							<span>Add to my attack rolls</span>
 						</div>
-						<div class="sheet-flexRow sheet-flexEnd sheet-flexGrow"> <!-- Row flex end -->
+						<div class="sheet-flexRow sheet-flexGrow sheet-attributeBase"> <!-- Row flex end -->
 							<span>Base</span>
 							<input type="number" name="attr_attack_bonus" value="0" class="sheet-smallCircleInput" />
 						</div>
@@ -1345,6 +1372,7 @@
 					<input type="hidden" name="attr_attack_bonus_total" value="0" />
 					<input type="hidden" name="attr_attack_bonus_withPlus" />
 					<div class="sheet-flexRow"> <!-- Row -->
+						<!-- TODO : Add new template for that -->
 						<button type="roll" name="roll_attack_bonus" class="sheet-attributeButton" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<span>Bonuses/Penalties</span>
@@ -1352,54 +1380,54 @@
 						</div>
 					</div>
 				</div>
-				<div class="sheet-flexColumn"> <!-- Column -->
+				<div class="sheet-flexColumn sheet-box sheet-2RowItem"> <!-- Column -->
 					<div class="sheet-flexRow"> <!-- Row -->
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<h2>Health total</h2>
 							<span>Protecting me from injuriy</span>
 						</div>
-						<div>
+						<div class="sheet-attributeBase sheet-flexGrow">
 							<span>Base</span>
 							<input type="number" name="attr_health_base" value="2" />
 						</div>
 					</div>
 					<div class="sheet-flexRow"> <!-- Row -->
 						<input type="hidden" name="attr_health_total" value="2" />
-						<button type="action" class="sheet-attributeButton" name="act_health"><span name="attr_health_total"></span></button>
+						<button type="action" class="sheet-attributeButton" name="act_health"><span name="attr_health_hearts"></span></button>
 						<div class="sheet-flexColumn"> <!-- Column -->
 							<div class="sheet-flexRow"> <!-- Row -->
 								<span>Hearts</span>
 								<input type="number" name="attr_health_hearts" value="2" />/<span name="attr_health_total"></span>
-								<div class="sheet-flexRow sheet-leftSeparation">
+								<div class="sheet-flexRowNoGap sheet-wrap sheet-smallGap sheet-leftSeparation">
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_1" value="1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_1"></button>
+										<button type="action" class="health-heart" name="act_health_heart_1"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_2" value="1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_2"></button>
+										<button type="action" class="health-heart" name="act_health_heart_2"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_3" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_3"></button>
+										<button type="action" class="health-heart" name="act_health_heart_3"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_4" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_4"></button>
+										<button type="action" class="health-heart" name="act_health_heart_4"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_5" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_5"></button>
+										<button type="action" class="health-heart" name="act_health_heart_5"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_6" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_6"></button>
+										<button type="action" class="health-heart" name="act_health_heart_6"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_7" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_7"></button>
+										<button type="action" class="health-heart" name="act_health_heart_7"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_8" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_8"></button>
+										<button type="action" class="health-heart" name="act_health_heart_8"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_9" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_9"></button>
+										<button type="action" class="health-heart" name="act_health_heart_9"></button>
 									</input>
 									<input type="hidden" class="health-heart-input" name="attr_health_heart_10" value="-1" >
-										<button type="action" class="health-heart sheet-square" name="act_health_heart_10"></button>
+										<button type="action" class="health-heart" name="act_health_heart_10"></button>
 									</input>
 								</div>
 							</div>
@@ -1414,7 +1442,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="sheet-flexColumn">
+				<div class="sheet-flexColumn sheet-box sheet-2RowItem">
 					<input type="hidden" name="attr_defense_rating_total" value="10" />
 					<div class="sheet-flexColumn"> <!-- Column -->
 						<div class="sheet-flexRow"> <!-- Row -->
@@ -1422,7 +1450,7 @@
 								<h2>Defense rating</h2>
 								<span>Best this to strike me</span>
 							</div>
-							<div class="sheet-flexRow"> <!-- Row -->
+							<div class="sheet-flexRow sheet-attributeBase sheet-flexGrow"> <!-- Row -->
 								<span>Base</span>
 								<input type="number" name="attr_defense_rating" value="10" class="sheet-smallCircleInput" />
 							</div>
@@ -1436,32 +1464,31 @@
 						</div>
 					</div>
 				</div>
-				<div class="sheet-flexColumn">
+				<div class="sheet-flexColumn sheet-box sheet-2RowItem">
 					<div class="sheet-flexColumn"> <!-- Column -->
 						<h2>Speed rating</h2>
 						<span>Decides how many Areas I can move</span>
-						<div class="sheet-flexRow"> <!-- Row -->
-							<!-- TODO : Change these radio button by a set of chechboxes -->
-							<!-- NOTE : Selected should be just either colored background or thicc border -->
-							<input type="checkbox" name="attr_speed_rating" value="0">
+						<input type="hidden" name="attr_speed_rating" value="0"/>
+						<div class="sheet-flexRowNoGap"> <!-- Row -->
+							<input type="hidden" class="sheet-speedBox" name="attr_speed_rating_total" value="1" />
+							<button type="action" class="sheet-flexColumnNoGap sheet-speedBox" name="act_speed_rating_0" value="0">
 								<span>Slow</span>
 								<span>0 Area</span>
-							</input>
-							<input type="checkbox" name="attr_speed_rating" value="1" checked>
+							</button>
+							<button type="action" class="sheet-flexColumnNoGap sheet-speedBox" name="act_speed_rating_1" value="1">
 								<span>Average</span>
 								<span>1 Area</span>						
-							</input>
-							<input type="checkbox" name="attr_speed_rating" value="2">
+							</button>
+							<button type="action" class="sheet-flexColumnNoGap sheet-speedBox" name="act_speed_rating_2" value="2">
 								<span>Fast</span>
 								<span>2 Area</span>
-							</input>
-							<input type="checkbox" name="attr_speed_rating" value="3">
+							</button>
+							<button type="action" class="sheet-flexColumnNoGap sheet-speedBox" name="act_speed_rating_3" value="3">
 								<span>Very Fast</span>
 								<span>2 Area</span>
-							</input>
+							</button>
 						</div>
 						<div class="sheet-flexRow"> <!-- Row -->
-							<input type="hidden" name="attr_speed_rating_total" value="1" />
 							<div>
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_speed_rating_modifier" value="0" />
@@ -1479,13 +1506,13 @@
 	</div>
 	<div class="sheet-notes">
 		<div class="sheet-2Row">
-			<div class="sheet-flexColumn">
+			<div class="sheet-flexColumn sheet-2RowItem">
 				<!-- Notes -->
 				<div>
 					<h1>Allegiance</h1>
 					<div class="sheet-flexRow">
 						<div class="sheet-flexGrow sheet-rightSeparation">
-							<div class="sheet-flexRow">
+							<div class="sheet-flexRow sheet-attributeBase">
 								<input type="number" name="attr_allegiance_dark" value="0" />
 								<span>
 									Dark<br>
@@ -1493,7 +1520,7 @@
 									Points
 								</span>
 							</div>
-							<div class="sheet-flexRow">
+							<div class="sheet-flexRow sheet-attributeBase">
 								<input type="number" name="attr_allegiance_bright" value="0" />
 								<span>
 									Bright<br>
@@ -1522,7 +1549,7 @@
 						</div>
 						<div class="sheet-flexGrow">
 							<span>Gifts</span>
-							<textarea name="attr_gifts"></textarea>
+							<textarea name="attr_gifts" class="sheet-unscaledTextArea"></textarea>
 						</div>
 					</div>
 				</div>
@@ -1546,17 +1573,17 @@
 				<div>
 					<h1>Quirk</h1>
 					<input type="text" name="attr_quirk" />
-					<textarea name="attr_quirk_notes"></textarea>
+					<textarea name="attr_quirk_notes" class="sheet-scalableTextArea"></textarea>
 				</div>
 				<div>
 					<h1>Abilities</h1>
 					<fieldset class="repeating_abilities">
 						<input type="text" name="ability_name" />
-						<textarea name="ability_notes"></textarea>
+						<textarea name="ability_notes" class="sheet-unscaledTextArea"></textarea>
 					</fieldset>
 				</div>
 			</div>
-			<div class="sheet-flexColumn">
+			<div class="sheet-flexColumn sheet-2RowItem">
 				<div>
 					<h1>Wealth</h1>
 					<div class="sheet-flexRow">
@@ -1576,7 +1603,7 @@
 				</div>
 				<div>
 					<h1>Inventory</h1>
-					<div class="sheet-flexRow">
+					<div class="sheet-flexRow sheet-downGap">
 						<div class="sheet-flexGrow sheet-flexColumn">
 							<div>
 								<input type="hidden" name="attr_inventory_total" value="10" />
@@ -1590,11 +1617,11 @@
 							</div>
 						</div>
 						<div class="sheet-flexGrow sheet-flexEnd sheet-flexColumn">
-							<div class="sheet-flexEnd">
+							<div class="sheet-flexEnd sheet-attributeBase">
 								<span>Base</span>
 								<input type="number" name="attr_inventory_base" />
 							</div>
-							<div class="sheet-flexEnd">
+							<div class="sheet-flexEnd sheet-attributeBase">
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_inventory_modifier" />
 							</div>
@@ -1603,21 +1630,28 @@
 					<div>
 						<input type="hidden" name="attr_total_weight" value="0" />
 						<fieldset class="repeating_inventory">
-							<div>
-								<input type="text" name="attr_inventory_name" />
-								<span>Object size</span>
-								<input type="number" name="attr_inventory_size" value="1"/>
-								<span>Quantity</span>
-								<input type="number" name="attr_inventory_quantity" value="1"/>
+							<div class="sheet-flexColumn sheet-downGap">
+								<div>
+									<input type="text" name="attr_inventory_name" />
+									<span>Object size</span>
+									<input type="number" name="attr_inventory_size" value="1"/>
+								</div>
+								<div>
+									<span>Quantity</span>
+									<input type="number" name="attr_inventory_quantity" value="1"/>
+								</div>
+								<textarea name="attr_inventory_notes" class="sheet-unscaledTextArea"></textarea>
 							</div>
-							<textarea name="attr_inventory_notes"></textarea>
 						</fieldset>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div>
-			Notes <textarea name="attr_notes"></textarea>
+			<h1>Notes</h1>
+			<div class="sheet-flexColumn">
+				<textarea name="attr_notes" class="sheet-scalableTextArea"></textarea>
+			</div>
 		</div>
 	</div>
 </div>
@@ -1625,6 +1659,7 @@
 <!-- End Of Characters Sheet -->
 
 <!-- Rolls Templates  -->
+<!-- TODO : do template magic cuz this don't work -->
 <rolltemplate class="sheet-rolltemplate-carac">
 	<div class="sheet-template-container">
 		<div class="sheet-template-header"><span>{{name}}</span></div>

@@ -16,6 +16,14 @@ span {
 	font-weight: normal;
 }
 
+input {
+	border: none;
+}
+
+textarea {
+	border: none;
+}
+
 /**** tabs handler ***/
 /*Configure the tab buttons*/
 .sheet-stats, .sheet-notes {
@@ -50,20 +58,6 @@ span {
 	width: 100%;
 }
 
-.sheet-mainPageLeftSide {
-	flex-shrink: 1;
-	flex-grow: 1;
-	display: flex;
-	flex-flow: column nowrap;
-}
-
-.sheet-mainPageRightSide {
-	flex-shrink: 1;
-	flex-grow: 1;
-	display: flex;
-	flex-flow: column nowrap;
-}
-
 div.sheet-attributeHeader {
 	display: flex;
 	flex-flow: row nowrap;
@@ -77,6 +71,16 @@ div.sheet-attributeBase {
 	align-items: center;
 	justify-content: flex-end;
 	gap: 5px;
+}
+
+.sheet-attributeBase input[type="number"] {
+	width: 40px !important;
+	height: 40px !important;
+	background-color: #f5f5f5;
+	padding: 2px;
+	border: 2px solid black;
+	border-radius: 50%;
+	text-align: right;
 }
 
 .sheet-traitsList {
@@ -120,6 +124,13 @@ div.sheet-attributeBase {
 	gap: 5px;
 }
 
+.sheet-flexRowNoGap {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: center;
+}
+
 .sheet-flexEnd {
 	display: flex;
 	justify-content: flex-end;
@@ -131,6 +142,13 @@ div.sheet-attributeBase {
 	justify-content: flex-start;
 	align-items: stretch;
 	gap: 5px;
+}
+
+.sheet-flexColumnNoGap {
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
 }
 
 .sheet-flexRowInvert {
@@ -153,6 +171,15 @@ div.sheet-attributeBase {
 	flex-grow: 1;
 }
 
+.sheet-flexShrink {
+	flex-shrink: 1;
+}
+
+.sheet-flexIdentity {
+	flex-grow: 1;
+	flex-shrink: 1;
+}
+
 .sheet-flexGrowFull {
 	width: 100%;
 }
@@ -166,28 +193,26 @@ div.sheet-attributeBase {
 .sheet-2Row {
 	display: flex;
 	flex-flow: row wrap;
-	align-items: flex-start;
-	justify-content: space-between;
+	align-items: stretch;
+	justify-content: flex-start;
 	gap: 2%;
 }
 
-.sheet-2Row>div {
+.sheet-2RowItem {
 	flex-grow: 1;
 	flex-shrink: 1;
 	width: 48%;
+	box-sizing: border-box;
 }
 
-.sheet-2RowNoGap {
-	display: flex;
-	flex-flow: row wrap;
-	align-items: flex-start;
-	justify-content: space-between;
-}
-
-.sheet-boxes>div {
+.sheet-box {
 	border: 1px solid #d3d3d3;
 	padding: 4px;
 	margin-bottom: 4px;
+}
+
+.sheet-wrap {
+	flex-wrap: wrap;
 }
 
 /*Content*/
@@ -231,10 +256,6 @@ div.sheet-attributeBase {
 	background-color: none;
 }
 
-.sheet-attributeBase>span {
-	text-transform: uppercase;
-}
-
 .sheet-smallCircleInput {
 	width: 20px;
 	height: 20px;
@@ -255,11 +276,26 @@ div.sheet-attributeBase {
 	background-clip: content-box, padding-box;
 	font-weight: bold;
 	font-size: large;
+	flex-shrink: 0;
 }
 
 .sheet-attributeButton:hover {
 	border: 4px solid #3daade;
 	padding: 5px;
+}
+
+.sheet-attributeButtonNoHover {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	border: 2px solid black;
+	padding: 7px;
+	background-image:
+	linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 100%),
+	linear-gradient(to bottom, rgba(216, 214, 214, 1) 0%, rgba(216, 214, 214, 1) 100%);
+	background-clip: content-box, padding-box;
+	font-weight: bold;
+	font-size: large;
 }
 
 .sheet-attributeModifier>input {
@@ -294,6 +330,8 @@ div.sheet-attributeBase {
 
 .health-heart {
 	display: flex;
+	width: 1px !important;
+	height: 5px !important;
 }
 
 .health-heart-input[value="1"]~.health-heart {
@@ -306,15 +344,24 @@ div.sheet-attributeBase {
 	display: none;
 }
 
+.sheet-speedBox {
+	background-color: none;
+}
+
+.sheet-speedBox:hover {
+	border-color: #3daade;
+}
+
+.sheet-speedBox[value="0"]~button.sheet-speedBox[value="0"],
+.sheet-speedBox[value="1"]~button.sheet-speedBox[value="1"],
+.sheet-speedBox[value="2"]~button.sheet-speedBox[value="2"],
+.sheet-speedBox[value="3"]~button.sheet-speedBox[value="3"] {
+	background-color: lightgray;
+}
+
 .sheet-leftSeparation {
 	border-left: 2px solid #d3d3d3;
 	padding-left: 4px;
-}
-
-.sheet-attributeBox {
-	border: 1px solid #d3d3d3;
-	padding: 4px;
-	margin-bottom: 4px;
 }
 
 .sheet-rightSeparation {
@@ -322,6 +369,22 @@ div.sheet-attributeBase {
 	padding-right: 4px;
 }
 
+.sheet-smallGap {
+	gap: 2px;
+}
+
+.sheet-downGap {
+	padding-bottom: 6px;
+}
+
 .sheet-bold {
 	font-weight: bold;
+}
+
+.sheet-unscaledTextArea {
+	resize: none;
+}
+
+.sheet-scalableTextArea {
+	resize: vertical;
 }
