@@ -378,9 +378,11 @@
 	});
 
 	on("clicked:might", function() {
-		getAttrs(["might_total"], function(values) {
+		getAttrs(["might_total", "character_name"], function(values) {
 			var attribute = parseInt(values["might_total"])||0;
-			const rollString = "&{template:carac} {{rollName=Might}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
+			var character_name = values["character_name"]||"";
+
+			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Might}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -419,9 +421,11 @@
 	});
 
 	on("clicked:deftness", function() {
-		getAttrs(["deftness_total"], function(values) {
+		getAttrs(["deftness_total", "character_name"], function(values) {
 			var attribute = parseInt(values["deftness_total"])||0;
-			const rollString = "&{template:carac} {{rollName=Deftness}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
+			var character_name = values["character_name"]||"";
+
+			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Deftness}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -460,9 +464,11 @@
 	});
 
 	on("clicked:grit", function() {
-		getAttrs(["grit_total"], function(values) {
+		getAttrs(["grit_total", "character_name"], function(values) {
 			var attribute = parseInt(values["grit_total"])||0;
-			const rollString = "&{template:carac} {{rollName=Grit}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
+			var character_name = values["character_name"]||"";
+
+			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Grit}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -501,9 +507,11 @@
 	});
 
 	on("clicked:insight", function() {
-		getAttrs(["insight_total"], function(values) {
+		getAttrs(["insight_total", "character_name"], function(values) {
 			var attribute = parseInt(values["insight_total"])||0;
-			const rollString = "&{template:carac} {{rollName=Insight}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
+			var character_name = values["character_name"]||"";
+
+			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Insight}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -542,9 +550,11 @@
 	});
 
 	on("clicked:aura", function() {
-		getAttrs(["aura_total"], function(values) {
+		getAttrs(["aura_total", "character_name"], function(values) {
 			var attribute = parseInt(values["aura_total"])||0;
-			const rollString = "&{template:carac} {{rollName=Aura}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
+			var character_name = values["character_name"]||"";
+
+			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Aura}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -621,19 +631,25 @@
 	on(`${damageButtons}`, function(eventInfo) {
 		const triggerName = eventInfo.triggerName.replace("clicked:", "");
 		const eventSource = triggerName.replace("health_heart_", "");
-		const getAttrsParameters = ["health_total", triggerName]
+		const getAttrsParameters = ["health_total", "health_hearts", triggerName]
 		getAttrs(getAttrsParameters, function(values) {
+			const lastHearts = parseInt(values["health_hearts"])||0;
 			const clicked = parseInt(eventSource) || 3;
 			const lastValue = values[triggerName];
 			const total = parseInt(values["health_total"])||0;
 			const output = {};
 
 			for (let i = 1; i <= total; i++) {
-				if (i == clicked) continue;
+				if (i == clicked) {
+					output[`health_heart_${i}`] = (lastValue == "1") ? "0" : "1";
+				}
 				output[`health_heart_${i}`] = (i < clicked) ? "1" : "0";
 			}
 
-			output[`health_heart_${clicked}`] = (lastValue == "1") ? "0" : "1";
+			/*
+			if (clicked != lastHearts)
+				output[`health_heart_${clicked}`] = "1";
+			*/
 
 			output["health_hearts"] = clicked - (lastValue == "1" ? "1" : "0");
 
@@ -680,6 +696,7 @@
 			var total = base + modifier + speed_defense_modifier;
 
 			output["defense_rating_total"] = total;
+			output["speed_defense_modifier"] = speed_defense_modifier;
 
 			setAttrs(output, {silent: true});
 		});
@@ -1316,8 +1333,7 @@
 					<input type="hidden" name="attr_attack_bonus_total" value="0" />
 					<input type="hidden" name="attr_attack_bonus_withPlus" />
 					<div class="sheet-flexRow"> <!-- Row -->
-						<!-- TODO : Add new template for that -->
-						<button type="roll" name="roll_attack_bonus" class="sheet-attributeButton" value="/roll ?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}"><span name="attr_attack_bonus_withPlus"></span></button>
+						<button type="roll" name="roll_attack_bonus" class="sheet-attributeButton" value="&{template:generic} {{charName=@{character_name}}} {{rollName=Attack}} {{subLabel= total}} {{total=[[?{Roll type|Basic,d20|Edge,2d20kh1|Snag,2d20kl1} +@{attack_bonus_total} +?{Modifier|0}]]}}"><span name="attr_attack_bonus_withPlus"></span></button>
 						<div class="sheet-flexColumn sheet-attributeModifier"> <!-- Column -->
 							<span>Bonuses/Penalties</span>
 							<input type="number" name="attr_attack_bonus_modifier" class="sheet-flexGrowFull" /> <!-- Grow 1 -->
@@ -1388,6 +1404,7 @@
 				</div>
 				<div class="sheet-flexColumn sheet-box sheet-2RowItem">
 					<input type="hidden" name="attr_defense_rating_total" value="10" />
+					<input type="hidden" name="attr_speed_defense_modifier" value="Average" />
 					<div class="sheet-flexColumn"> <!-- Column -->
 						<div class="sheet-flexRow"> <!-- Row -->
 							<div class="sheet-flexColumn"> <!-- Column -->
@@ -1400,7 +1417,7 @@
 							</div>
 						</div>
 						<div class="sheet-flexRow"> <!-- Row -->
-							<button type="action" class="sheet-attributeButton" name="roll_defense_rating"><span name="attr_defense_rating_total"></span></button>
+							<button type="roll" class="sheet-attributeButton" name="roll_defense_rating_button" value="&{template:generic} {{charName=@{character_name}}} {{rollName=Defense}} {{subLabel= total}} {{total=[[@{defense_rating}+@{defense_rating_modifier}+@{speed_defense_modifier}]]}}"><span name="attr_defense_rating_total"></span></button>
 							<div class="sheet-flexColumn sheet-attributeModifier"> <!-- Column -->
 								<span>Bonuses/Penalties</span>
 								<input type="number" name="attr_defense_rating_modifier" value="0" />
@@ -1551,12 +1568,12 @@
 						<div class="sheet-flexGrow sheet-flexColumn">
 							<div>
 								<input type="hidden" name="attr_inventory_total" value="10" />
-								<button type="roll" name="roll_inventory"><span name="attr_inventory_total"></span></button>
+								<button type="roll" name="roll_inventory" value="&{template:generic} {{charName=@{character_name}}} {{rollName=Inventory}} {{subLabel= total}} {{total=[[@{inventory_base}+@{inventory_modifier}]]}}"><span name="attr_inventory_total"></span></button>
 								<span>Inventory slots</span>
 							</div>
 							<div>
 								<input type="hidden" name="attr_inventory_left" value="10" />
-								<button type="roll" name="roll_inventory_left"><span name="attr_inventory_left"></span></button>
+								<button type="roll" name="roll_inventory_left" value="&{template:generic} {{charName=@{character_name}}} {{rollName=Inventory}} {{subLabel= left}} {{total=[[@{inventory_base}+@{inventory_modifier}-@{total_weight}]]}}"><span name="attr_inventory_left"></span></button>
 								<span>Inventory left</span>
 							</div>
 						</div>
@@ -1614,6 +1631,15 @@
 				<div class="sheet-template-row"><span>Roll Type = </span>{{computed::rollType}}</div>
 				<div class="sheet-template-row">{{#attribute}}<span>Target = </span>{{computed::attribute}}{{/attribute}}</div>
 			</div>
+		</div>
+	</div>
+</rolltemplate>
+
+<rolltemplate class="sheet-rolltemplate-generic">
+	<div class="sheet-template-container">
+		<div class="sheet-template-header"><h1>{{charName}} {{rollName}}</h1></div>
+		<div class="sheet-template-contents">
+			<div class="sheet-template-row">{{rollName}}{{subLabel}} = {{total}}</div>
 		</div>
 	</div>
 </rolltemplate>

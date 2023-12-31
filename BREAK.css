@@ -474,7 +474,8 @@ div.sheet-attributeBase {
 	resize: vertical;
 }
 
-.sheet-rolltemplate-carac .sheet-template-container {
+.sheet-rolltemplate-carac .sheet-template-container,
+.sheet-rolltemplate-generic .sheet-template-container {
 	display: flex;
 	flex-flow: column nowrap;
 	justify-content: flex-start;
@@ -483,12 +484,14 @@ div.sheet-attributeBase {
 	border-radius: 10px;
 }
 
-.sheet-rolltemplate-carac .sheet-template-container {
+.sheet-rolltemplate-carac .sheet-template-container,
+.sheet-rolltemplate-generic .sheet-template-container {
 	border-color: #aaaaaa;
 	background-color: white;
 }
 
-.sheet-rolltemplate-carac.sheet-rolltemplate-darkmode .sheet-template-container {
+.sheet-rolltemplate-carac.sheet-rolltemplate-darkmode .sheet-template-container,
+.sheet-rolltemplate-generic.sheet-rolltemplate-darkmode .sheet-template-container {
 	border-color: #702c91;
 	background-color: #1f1f1f;
 }
@@ -497,7 +500,8 @@ div.sheet-attributeBase {
 	display: none;
 }
 
-.sheet-rolltemplate-carac .sheet-template-header {
+.sheet-rolltemplate-carac .sheet-template-header,
+.sheet-rolltemplate-generic .sheet-template-header {
 	padding: 5px;
 	display: flex;
 	align-items: stretch;
@@ -505,15 +509,18 @@ div.sheet-attributeBase {
 	border-top-right-radius: 10px;
 }
 
-.sheet-rolltemplate-carac .sheet-template-header {
+.sheet-rolltemplate-carac .sheet-template-header,
+.sheet-rolltemplate-generic .sheet-template-header {
 	background-color: lightgray;
 }
 
-.sheet-rolltemplate-carac.sheet-rolltemplate-darkmode .sheet-template-header {
+.sheet-rolltemplate-carac.sheet-rolltemplate-darkmode .sheet-template-header,
+.sheet-rolltemplate-generic.sheet-rolltemplate-darkmode .sheet-template-header {
 	background-color: #2c2c2c;
 }
 
-.sheet-rolltemplate-carac .sheet-template-header h1 {
+.sheet-rolltemplate-carac .sheet-template-header h1,
+.sheet-rolltemplate-generic .sheet-template-header h1 {
 	flex-grow: 1;
 	text-align: center;
 	text-transform: uppercase;
@@ -521,7 +528,8 @@ div.sheet-attributeBase {
 	font-size: large;
 }
 
-.sheet-rolltemplate-carac .sheet-template-contents {
+.sheet-rolltemplate-carac .sheet-template-contents,
+.sheet-rolltemplate-generic .sheet-template-contents {
 	margin: 10px;
 	padding: 5px;
 	display: flex;
