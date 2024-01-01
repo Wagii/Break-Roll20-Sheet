@@ -339,7 +339,7 @@
 		getAttrs(["character_name"], function(values) {
 			var character_name = values["character_name"]||"";
 
-			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=" + attribute + "}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{attribute=[[0]]}} {{result=[[0]]}}";
+			const rollString = "@{rollWhisperType} &{template:carac} {{charName=" + character_name + "}} {{rollName=" + attribute + " " + squareNumber + "}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{attribute=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -377,184 +377,14 @@
 		});
 	});
 
-	on("clicked:might", function() {
-		getAttrs(["might_total", "character_name"], function(values) {
-			var attribute = parseInt(values["might_total"])||0;
+	const rollAttributes = ["might", "deftness", "grit", "insight", "aura"].map(name => `clicked:${name}`).join(' ');
+	on(`${rollAttributes}`, function(eventInfo) {
+		const attributeName = eventInfo.triggerName.replace("clicked:", "");
+		getAttrs([`${attributeName}_total`, "character_name"], function(values) {
+			var attribute = parseInt(values[`${attributeName}_total`])||0;
 			var character_name = values["character_name"]||"";
 
-			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Might}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
-
-			startRoll(rollString, function(results) {
-				const l_roll1 = results.results.roll1;
-				const modifier = parseInt(results.results.modifier.result)||0;
-				const rollType = parseInt(results.results.rollType.result)||0;
-
-				var l_selectedDie = 0;
-				if (rollType == 0) {
-					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
-				} else if (rollType == 1) {
-					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
-				} else {
-					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
-				}
-
-				var l_rollType = "";
-				if (rollType == 0) {
-					l_rollType = "Basic";
-				} else if (rollType == 1) {
-					l_rollType = "Edge";
-				} else {
-					l_rollType = "Snag";
-				}
-
-				const computed = {
-					total: l_selectedDie.total,
-					result: l_selectedDie.result,
-					modifier: modifier,
-					rollType: l_rollType,
-					attribute: attribute
-				};
-
-				finishRoll(results.rollId, computed);
-			});
-		});
-	});
-
-	on("clicked:deftness", function() {
-		getAttrs(["deftness_total", "character_name"], function(values) {
-			var attribute = parseInt(values["deftness_total"])||0;
-			var character_name = values["character_name"]||"";
-
-			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Deftness}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
-
-			startRoll(rollString, function(results) {
-				const l_roll1 = results.results.roll1;
-				const modifier = parseInt(results.results.modifier.result)||0;
-				const rollType = parseInt(results.results.rollType.result)||0;
-
-				var l_selectedDie = 0;
-				if (rollType == 0) {
-					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
-				} else if (rollType == 1) {
-					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
-				} else {
-					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
-				}
-
-				var l_rollType = "";
-				if (rollType == 0) {
-					l_rollType = "Basic";
-				} else if (rollType == 1) {
-					l_rollType = "Edge";
-				} else {
-					l_rollType = "Snag";
-				}
-
-				const computed = {
-					total: l_selectedDie.total,
-					result: l_selectedDie.result,
-					modifier: modifier,
-					rollType: l_rollType,
-					attribute: attribute
-				};
-
-				finishRoll(results.rollId, computed);
-			});
-		});
-	});
-
-	on("clicked:grit", function() {
-		getAttrs(["grit_total", "character_name"], function(values) {
-			var attribute = parseInt(values["grit_total"])||0;
-			var character_name = values["character_name"]||"";
-
-			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Grit}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
-
-			startRoll(rollString, function(results) {
-				const l_roll1 = results.results.roll1;
-				const modifier = parseInt(results.results.modifier.result)||0;
-				const rollType = parseInt(results.results.rollType.result)||0;
-
-				var l_selectedDie = 0;
-				if (rollType == 0) {
-					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
-				} else if (rollType == 1) {
-					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
-				} else {
-					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
-				}
-
-				var l_rollType = "";
-				if (rollType == 0) {
-					l_rollType = "Basic";
-				} else if (rollType == 1) {
-					l_rollType = "Edge";
-				} else {
-					l_rollType = "Snag";
-				}
-
-				const computed = {
-					total: l_selectedDie.total,
-					result: l_selectedDie.result,
-					modifier: modifier,
-					rollType: l_rollType,
-					attribute: attribute
-				};
-
-				finishRoll(results.rollId, computed);
-			});
-		});
-	});
-
-	on("clicked:insight", function() {
-		getAttrs(["insight_total", "character_name"], function(values) {
-			var attribute = parseInt(values["insight_total"])||0;
-			var character_name = values["character_name"]||"";
-
-			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Insight}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
-
-			startRoll(rollString, function(results) {
-				const l_roll1 = results.results.roll1;
-				const modifier = parseInt(results.results.modifier.result)||0;
-				const rollType = parseInt(results.results.rollType.result)||0;
-
-				var l_selectedDie = 0;
-				if (rollType == 0) {
-					l_selectedDie = ComputeOneDieResult(l_roll1.dice[0], attribute, modifier);
-				} else if (rollType == 1) {
-					l_selectedDie = ComputeWithEdge(l_roll1.dice, attribute, modifier);
-				} else {
-					l_selectedDie = ComputeWithSnag(l_roll1.dice, attribute, modifier);
-				}
-
-				var l_rollType = "";
-				if (rollType == 0) {
-					l_rollType = "Basic";
-				} else if (rollType == 1) {
-					l_rollType = "Edge";
-				} else {
-					l_rollType = "Snag";
-				}
-
-				const computed = {
-					total: l_selectedDie.total,
-					result: l_selectedDie.result,
-					modifier: modifier,
-					rollType: l_rollType,
-					attribute: attribute
-				};
-
-					finishRoll(results.rollId, computed);
-			});
-		});
-	});
-
-	on("clicked:aura", function() {
-		getAttrs(["aura_total", "character_name"], function(values) {
-			var attribute = parseInt(values["aura_total"])||0;
-			var character_name = values["character_name"]||"";
-
-			const rollString = "&{template:carac} {{charName=" + character_name + "}} {{rollName=Aura}} {{roll1=[[2d20]]}} {{attribute=[[0]]}} {{modifier=[[?{Modifiers|0}]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
+			const rollString = "@{rollWhisperType} &{template:carac} {{charName=" + character_name + "}} {{rollName=" + attributeName + "}} {{roll1=[[2d20]]}} {{modifier=[[?{Modifiers|0}]]}} {{attribute=[[0]]}} {{rollType=[[?{Roll Type|Basic, 0|Edge, 1|Snag, -1}]]}} {{total=[[0]]}} {{result=[[0]]}}";
 
 			startRoll(rollString, function(results) {
 				const l_roll1 = results.results.roll1;
@@ -639,19 +469,25 @@
 			const total = parseInt(values["health_total"])||0;
 			const output = {};
 
-			for (let i = 1; i <= total; i++) {
-				if (i == clicked) {
-					output[`health_heart_${i}`] = (lastValue == "1") ? "0" : "1";
+			if (clicked > lastHearts)
+			{
+				for (let i = 1; i <= clicked; i++) {
+					output[`health_heart_${i}`] = "1";
 				}
-				output[`health_heart_${i}`] = (i < clicked) ? "1" : "0";
+				output["health_hearts"] = clicked;
 			}
-
-			/*
-			if (clicked != lastHearts)
-				output[`health_heart_${clicked}`] = "1";
-			*/
-
-			output["health_hearts"] = clicked - (lastValue == "1" ? "1" : "0");
+			else if (clicked < lastHearts)
+			{
+				for (let i = total; i > clicked; i--) {
+					output[`health_heart_${i}`] = "0";
+				}
+				output["health_hearts"] = clicked;
+			}
+			else
+			{
+				output[`health_heart_${clicked}`] = (lastValue == "1") ? "0" : "1";
+				output["health_hearts"] = clicked - (lastValue == "1" ? 1 : 0);
+			}
 
 			setAttrs(output, {silent: true});
 		});
@@ -789,9 +625,18 @@
 <html>
 <div class="charsheet">
 	<input type="hidden" class="sheet-tabstoggle" name="attr_sheetTab" value="stats" />
-	<div>
-		<button type="action" class="sheet-tabButton" name="act_stats">Stats</button>
-		<button type="action" class="sheet-tabButton" name="act_notes">Notes</button>
+	<div class="sheet-flexRow">
+		<div>
+			<button type="action" class="sheet-tabButton" name="act_stats">Stats</button>
+			<button type="action" class="sheet-tabButton" name="act_notes">Notes</button>
+		</div>
+		<div class="sheet-flexGrow sheet-flexEnd">
+			<select name="attr_rollWhisperType">
+				<option value="" selected><span>Show rolls</span></option>
+				<option value="?{Whisper?|Public Roll,|Whisper Roll,/w gm }"><span>Ask each time</span></option>
+				<option value="/w gm"><span>Always whisper</span></option>
+			</select>
+		</div>
 	</div>
 
 	<div class="sheet-stats">
